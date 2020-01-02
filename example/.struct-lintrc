@@ -1,0 +1,15 @@
+{
+  "include": ["./**/*.ts"],
+  "structure": [
+    {
+      "description": "Core application business logic",
+      "path": "./modules",
+      "disallowedImports": ["/components/**/*"]
+    },
+    {
+      "description": "UI components",
+      "path": "./components",
+      "disallowedImports": ["/lib/**/*"]
+    }
+  ]
+}

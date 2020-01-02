@@ -1,0 +1,27 @@
+{
+  "name": "struct-lint",
+  "bin": "./bin/struct-lint.js",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/parser": "^7.7.7",
+    "@babel/traverse": "^7.7.4",
+    "chalk": "^3.0.0",
+    "cosmiconfig": "^6.0.0",
+    "dedent": "^0.7.0",
+    "fast-glob": "^3.1.1",
+    "micromatch": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.0.8",
+    "@types/node": "^13.1.1",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prestart": "yarn build",
+    "start": "struct-lint --config ./example"
+  }
+}

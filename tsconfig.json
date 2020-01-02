@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "target": "esnext",
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "include": [
+    ".src/**/*"
+  ]
+}
