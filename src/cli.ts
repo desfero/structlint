@@ -1,6 +1,7 @@
-import * as fg from "fast-glob";
+import * as globby from "globby";
 import * as chalk from "chalk";
-import { cosmiconfig } from "cosmiconfig";
+import { cosmiconfigSync } from "cosmiconfig";
+import { dirname, join, relative, sep } from "path";
 
 import { parse } from "./parser";
 import { analyze } from "./analyzer";
@@ -18,28 +19,58 @@ const terminate = () => {
     process.exit(1);
 };
 
+const runTask = async ({ relativePath, structure }) => {
+    const taskNested = await Promise.all(structure.map(async structure => {
+        const path = join(relativePath, structure.path);
+        const disallowedImports = structure.disallowedImports.map(imp => join(sep, relativePath, imp));
+
+        const files = await globby(path, { expandDirectories: structure.recursive, onlyFiles: true, });
+
+        const root = parse(files);
+
+        const directories = await globby(path, { expandDirectories: structure.recursive, onlyDirectories: true, });
+
+        const violations = await analyze(root, [path, ...directories], disallowedImports);
+
+        return violations;
+    }));
+
+    return taskNested.flat(Infinity);
+};
+
 const run = async () => {
     try {
-        const explorer = cosmiconfig(name);
+        debug(`Root: ${process.cwd()}`);
 
-        const result = await explorer.search();
+        log("Resolving configs...");
 
-        if (!result || result.isEmpty) {
+        const explorer = cosmiconfigSync(name);
+
+        const configs = globby
+            .sync(["**/.struct-lint-rc"])
+            .map(file => explorer.load(file))
+            .flatMap(({ config, filepath }) => {
+                // filter all empty configs
+                if (!config) {
+                    return [];
+                }
+
+                return [({
+                    ...config,
+                    relativePath: relative(process.cwd(), dirname(filepath))
+                })];
+            });
+
+        if (configs.length === 0) {
             error(logBold.red("You need to specify structure config to run linter."));
             terminate();
         }
 
         log("Linting folder structure...");
 
-        debug(`Root: ${process.cwd()}`);
+        const violationsNested = await Promise.all(configs.map(runTask));
 
-        const files = await fg(result.config.include, { dot: true, });
-
-        debug(`Files to parse: \n${files.join("\n")}`);
-
-        const root = parse(files);
-
-        const violations = await analyze(root, result.config);
+        const violations = violationsNested.flat(Infinity);
 
         log(printResult(violations));
 

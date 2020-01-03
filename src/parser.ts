@@ -5,6 +5,14 @@ import traverse from "@babel/traverse";
 import {getFile, getFolder} from "./travelsar";
 import {Folder} from "./types";
 
+const root: Folder = {
+    parent: undefined,
+    path: "/",
+    name: ".",
+    files: {},
+    folders: {},
+};
+
 const getImports = (fileName: string, fileContent: string) => {
     const ast = parser.parse(fileContent, {
         sourceType: "unambiguous",
@@ -57,14 +65,6 @@ const setFileImports = (rootMap: Folder, path: string[], relativeImports: string
 };
 
 export const parse = (files: string[]) => {
-    let root: Folder = {
-        parent: undefined,
-        path: "/",
-        name: ".",
-        files: {},
-        folders: {},
-    };
-
     return files.reduce((acc, file) => {
         try {
             const fileBuffer = readFileSync(file);

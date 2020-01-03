@@ -1,14 +1,15 @@
 {
-  "include": ["./**/*.ts"],
   "structure": [
     {
       "description": "Core application business logic",
       "path": "./modules",
+      "recursive": true,
       "disallowedImports": ["/components/**/*"]
     },
     {
       "description": "UI components",
       "path": "./components",
+      "recursive": true,
       "disallowedImports": ["/lib/**/*"]
     }
   ]

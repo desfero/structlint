@@ -1,0 +1,10 @@
+{
+  "structure": [
+    {
+      "description": "Shared components",
+      "path": "./shared",
+      "recursive": true,
+      "disallowedImports": ["/*"]
+    },
+  ]
+}

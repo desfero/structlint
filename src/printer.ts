@@ -28,7 +28,7 @@ const printResult = (violations: Violation[]) => {
         return `Found ${bold.red(violations.length)} violation${violations.length !== 1 ? "s" : ""}`;
     }
 
-    return "No violations found"
+    return chalk.green("No violations found");
 };
 
 const prettyPrintViolations = (violations: Violation[]) => {
