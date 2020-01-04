@@ -1,3 +1,3 @@
 export const TxModal = () => {
-    return null;
+  return null;
 };

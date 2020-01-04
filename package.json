@@ -20,6 +20,7 @@
     "@types/micromatch": "^3.1.1",
     "@types/node": "^13.1.1",
     "@types/yup": "^0.26.27",
+    "prettier": "^1.19.1",
     "ts-node": "^8.5.4",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
@@ -28,6 +29,8 @@
     "build": "tsc",
     "prestart": "yarn build",
     "start": "struct-lint --config ./example",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "format": "prettier --check '**/*.{ts,tsx,js,json,md,gql}'",
+    "format:fix": "prettier --write '**/*.{ts,tsx,js,json,md,gql}'"
   }
 }

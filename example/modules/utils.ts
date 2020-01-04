@@ -1,3 +1,3 @@
-export const showModal = (modal) => {
-    console.log(modal);
+export const showModal = modal => {
+  console.log(modal);
 };

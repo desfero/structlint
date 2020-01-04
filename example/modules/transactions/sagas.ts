@@ -1,13 +1,13 @@
 import { TxModal } from "../../components/TxModal";
 import { TxSuccessModal } from "../../components/TxSuccessModal";
-import {showModal} from "../utils";
+import { showModal } from "../utils";
 
 function transactionsSagas() {
-    showModal(TxModal);
+  showModal(TxModal);
 
-    // ...
+  // ...
 
-    showModal(TxSuccessModal);
+  showModal(TxSuccessModal);
 }
 
 export { transactionsSagas };
