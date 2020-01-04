@@ -11,11 +11,13 @@
     "cosmiconfig": "^6.0.0",
     "dedent": "^0.7.0",
     "globby": "^10.0.1",
-    "micromatch": "^4.0.2"
+    "micromatch": "^4.0.2",
+    "yup": "^0.28.0"
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.0.8",
     "@types/node": "^13.1.1",
+    "@types/yup": "^0.26.27",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
   },

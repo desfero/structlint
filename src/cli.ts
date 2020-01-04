@@ -1,12 +1,11 @@
 import * as globby from "globby";
 import * as chalk from "chalk";
-import { cosmiconfigSync } from "cosmiconfig";
-import { dirname, join, relative, sep } from "path";
+import { join, sep } from "path";
 
 import { parse } from "./parser";
 import { analyze } from "./analyzer";
-import {prettyPrintViolations, printResult} from "./printer";
-import { name } from "../package.json";
+import { prettyPrintViolations, printResult } from "./printer";
+import { Config, loadConfigs } from "./config";
 
 const log = console.log;
 const error = console.error;
@@ -19,7 +18,7 @@ const terminate = () => {
     process.exit(1);
 };
 
-const runTask = async ({ relativePath, structure }) => {
+const runTask = async ({ relativePath, structure }: Config) => {
     const taskNested = await Promise.all(structure.map(async structure => {
         const path = join(relativePath, structure.path);
         const disallowedImports = structure.disallowedImports.map(imp => join(sep, relativePath, imp));
@@ -44,22 +43,7 @@ const run = async () => {
 
         log("Resolving configs...");
 
-        const explorer = cosmiconfigSync(name);
-
-        const configs = globby
-            .sync(["**/.struct-lint-rc"])
-            .map(file => explorer.load(file))
-            .flatMap(({ config, filepath }) => {
-                // filter all empty configs
-                if (!config) {
-                    return [];
-                }
-
-                return [({
-                    ...config,
-                    relativePath: relative(process.cwd(), dirname(filepath))
-                })];
-            });
+        const configs = loadConfigs();
 
         if (configs.length === 0) {
             error(logBold.red("You need to specify structure config to run linter."));
