@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import {sep, resolve} from "path";
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
-import {getFile, getFolder} from "./travelsar";
+import {getFile} from "./travelsar";
 import {Folder} from "./types";
 
 const root: Folder = {
@@ -47,7 +47,7 @@ const getImports = (fileName: string, fileContent: string) => {
         ]
     });
 
-    const imports = [];
+    const imports: string[] = [];
 
     traverse(ast, {
         ImportDeclaration(path) {

@@ -124,10 +124,20 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/braces@*":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/braces/-/braces-3.0.0.tgz#7da1c0d44ff1c7eb660a36ec078ea61ba7eb42cb"
+  integrity sha512-TbH79tcyi9FHwbyboOKeRachRq63mSuWYXOflsNO9ZyE5ClQ/JaozNKl+aWUq87qPNsXasXxi2AbgfwIJ+8GQw==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
+
+"@types/dedent@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@types/dedent/-/dedent-0.7.0.tgz#155f339ca404e6dd90b9ce46a3f78fd69ca9b050"
+  integrity sha512-EGlKlgMhnLt/cM4DbUSafFdrkeJoC9Mvnj0PUCU7tFmTjMjNRT957kXCx0wYm3JuEq4o4ZsS5vG+NlkM2DMd2A==
 
 "@types/events@*":
   version "3.0.0"
@@ -142,6 +152,13 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/micromatch@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@types/micromatch/-/micromatch-3.1.1.tgz#98eac88894da6606c2690624a9893a59c812d9fa"
+  integrity sha512-Wr5y4uv3r7JP4jEUqv7rZeYiMBGRHcbojDVsl11wq6gw1v/ZZQvJexd9rtvVx3EIVqw8dwtcRjSs8m2DV9qHjQ==
+  dependencies:
+    "@types/braces" "*"
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -640,6 +657,11 @@ ts-node@^8.5.4:
     make-error "^1.1.1"
     source-map-support "^0.5.6"
     yn "^3.0.0"
+
+tslib@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
+  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
 typescript@^3.7.4:
   version "3.7.4"

@@ -31,16 +31,20 @@ const loadConfigs = (): ReadonlyArray<Config> => {
     return globby
         .sync(CONFIG_PATTERNS)
         .map(file => configExplorer.load(file))
-        .flatMap(({ config: parsedConfig, filepath }) => {
-            // filter all empty configs
-            if (!parsedConfig) {
-                return [];
+        .flatMap(result => {
+            if (result !== null) {
+                // filter all empty configs
+                if (result.isEmpty) {
+                    return [];
+                }
+
+                return {
+                    ...result.config,
+                    relativePath: relative(process.cwd(), dirname(result.filepath))
+                };
             }
 
-            return {
-                ...parsedConfig,
-                relativePath: relative(process.cwd(), dirname(filepath))
-            };
+
         })
         .map(config => configSchema.validateSync(config));
 };

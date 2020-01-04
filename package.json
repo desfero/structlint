@@ -16,14 +16,18 @@
   },
   "devDependencies": {
     "@types/babel__traverse": "^7.0.8",
+    "@types/dedent": "^0.7.0",
+    "@types/micromatch": "^3.1.1",
     "@types/node": "^13.1.1",
     "@types/yup": "^0.26.27",
     "ts-node": "^8.5.4",
+    "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   },
   "scripts": {
     "build": "tsc",
     "prestart": "yarn build",
-    "start": "struct-lint --config ./example"
+    "start": "struct-lint --config ./example",
+    "tsc": "tsc --noEmit"
   }
 }

@@ -1,6 +1,8 @@
-import { join, normalize } from "path";
+import { join } from "path";
 import * as micromatch from "micromatch";
+
 import { Folder, File } from "./types";
+import { nonNullable } from "./utils";
 
 const getFolder = ([folderName, ...rest]: string[], rootMap: Folder): Folder => {
     if (folderName === undefined) {
@@ -46,6 +48,8 @@ type FileWithMatchedImports = { file: File, matchedImports: string[] };
 
 const findFilesWithImports = ({ files }: Folder, importsGlobs: string[]): FileWithMatchedImports[] => {
     return Object.values(files).flatMap(file => {
+        nonNullable(file);
+
         const matchedImports = micromatch(file.imports, importsGlobs);
 
         if (matchedImports.length > 0) {
