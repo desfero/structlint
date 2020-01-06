@@ -1,6 +1,6 @@
 {
-  "name": "struct-lint",
-  "bin": "./bin/struct-lint.js",
+  "name": "structlint",
+  "bin": "./bin/structlint.js",
   "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
@@ -28,7 +28,7 @@
   "scripts": {
     "build": "tsc",
     "prestart": "yarn build",
-    "start": "struct-lint --config ./example",
+    "start": "structlint --config ./example",
     "tsc": "tsc --noEmit",
     "format": "prettier --check '**/*.{ts,tsx,js,json,md,gql}'",
     "format:fix": "prettier --write '**/*.{ts,tsx,js,json,md,gql}'"

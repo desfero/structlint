@@ -5,7 +5,7 @@ import { dirname, relative } from "path";
 
 import { name } from "../package.json";
 
-const CONFIG_PATTERNS = ["**/.struct-lint-rc"];
+const CONFIG_PATTERNS = ["**/.structlintrc"];
 
 const configExplorer = cosmiconfigSync(name);
 
