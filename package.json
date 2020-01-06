@@ -2,11 +2,17 @@
   "name": "structlint",
   "description": "Lint your project structure against architecture rules",
   "keywords": [
-    "cli",
     "structure linter",
     "architecture linter",
     "lint folders",
-    "eslint for structure"
+    "eslint for structure",
+    "directory",
+    "structure",
+    "linter",
+    "linting",
+    "folder",
+    "directories",
+    "folders"
   ],
   "bin": "./bin/structlint.js",
   "version": "0.0.1",
