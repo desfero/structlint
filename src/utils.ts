@@ -13,4 +13,18 @@ function nonNullable<T>(
   }
 }
 
-export { nonNullable };
+type Primitive = string | number | boolean | undefined | null;
+
+type DeepReadonly<T> = T extends Primitive
+  ? T
+  : T extends Array<infer U>
+  ? ReadonlyArray<U>
+  : T extends Function
+  ? T
+  : DeepReadonlyObject<T>;
+
+export type DeepReadonlyObject<T> = {
+  readonly [P in keyof T]: DeepReadonly<T[P]>;
+};
+
+export { nonNullable, Primitive, DeepReadonly };

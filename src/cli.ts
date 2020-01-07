@@ -39,9 +39,9 @@ const runTask = async ({ relativePath, structure }: Config) => {
       });
 
       const violations = await analyze(
-        root,
         [path, ...directories],
         disallowedImports,
+        root,
       );
 
       return violations;
