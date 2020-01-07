@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { sep, resolve } from "path";
+import { resolve } from "path";
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
 import { getFile } from "./travelsar";
@@ -60,7 +60,7 @@ const getImports = (fileName: string, fileContent: string) => {
 
 const setFileImports = (
   rootMap: Folder,
-  path: string[],
+  path: string,
   relativeImports: string[],
 ) => {
   const file = getFile(path, rootMap);
@@ -80,9 +80,7 @@ export const parse = (files: string[]) => {
       const relativeImports = getImports(file, fileContent);
 
       if (relativeImports.length) {
-        const filePath = file.split(sep);
-
-        setFileImports(acc, filePath, relativeImports);
+        setFileImports(acc, file, relativeImports);
 
         return acc;
       }

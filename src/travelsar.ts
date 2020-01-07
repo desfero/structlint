@@ -1,37 +1,36 @@
-import { join } from "path";
+import { join, basename, dirname, sep } from "path";
 import * as micromatch from "micromatch";
 
 import { Folder, File } from "./types";
 import { nonNullable } from "./utils";
 
-const getFolder = (
-  [folderName, ...rest]: string[],
-  rootMap: Folder,
-): Folder => {
-  if (folderName === undefined) {
+const getFolder = (path: string, rootMap: Folder): Folder => {
+  const [current, ...rest] = path.split(sep);
+
+  if (current === ".") {
     return rootMap;
   }
 
-  let folder = folderName === "." ? rootMap : rootMap.folders[folderName];
+  let folder = rootMap.folders[current];
 
   if (folder === undefined) {
-    folder = rootMap.folders[folderName] = {
-      path: join(rootMap.path, folderName),
-      name: folderName,
+    folder = rootMap.folders[current] = {
+      path: join(rootMap.path, current),
+      name: current,
       files: {},
       folders: {},
       parent: rootMap,
     };
   }
 
-  return getFolder(rest, folder);
+  return getFolder(join(...rest), folder);
 };
 
-const getFile = (path: string[], rootMap: Folder): File => {
-  const fileName = path[path.length - 1];
-  const foldersNames = path.slice(0, -1);
+const getFile = (path: string, rootMap: Folder): File => {
+  const fileName = basename(path);
+  const dirName = dirname(path);
 
-  const folder = getFolder(foldersNames, rootMap);
+  const folder = getFolder(dirName, rootMap);
 
   let file = folder.files[fileName];
 

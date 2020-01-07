@@ -1,4 +1,3 @@
-import { sep } from "path";
 import { findFilesWithImports, getFolder } from "./travelsar";
 import { createDisallowedImportViolation, Violation } from "./violations";
 import { Folder } from "./types";
@@ -9,7 +8,7 @@ export const analyze = async (
   disallowedImports: string[],
 ): Promise<Violation[]> => {
   return directories.flatMap(directory => {
-    const folder = getFolder(directory.split(sep), root);
+    const folder = getFolder(directory, root);
 
     const filesWithMatchedImports = findFilesWithImports(
       folder,
