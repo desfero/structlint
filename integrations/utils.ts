@@ -11,7 +11,7 @@ const structLint = ({ cwd }: { cwd: string }) =>
           pReject(new Error(`Failed to run structlint. Error: ${error}`));
         }
 
-        pResolve(stdout);
+        pResolve({ stdout, code: error ? error.code : 0 });
       },
     );
   });
