@@ -16,14 +16,17 @@ const printViolation = (violation: Violation) => {
   }
 };
 
-const logDisallowedImportViolation = (
-  violation: ViolationByType<ViolationType.DISALLOWED_IMPORTS>,
-) => {
+const logDisallowedImportViolation = ({
+  file,
+  config,
+  disallowedImports,
+}: ViolationByType<ViolationType.DISALLOWED_IMPORTS>) => {
   return dedent`
-        The following imports are disallowed in ${bold(violation.file.path)}
-        ${violation.disallowedImports
+        The following imports are disallowed in ${bold(file.path)}
+        ${disallowedImports
           .map(importPath => `- ${bold(importPath)}`)
           .join("\n")}
+        ${config.message || ""}  
     `;
 };
 
@@ -38,12 +41,15 @@ const printResult = (violations: Violation[]) => {
 };
 
 const prettyPrintViolations = (violations: Violation[]) => {
-  return violations
-    .map(
-      violation =>
-        dedent`${printType(violation.type)}: ${printViolation(violation)}`,
-    )
-    .join("\n");
+  return (
+    "\n" +
+    violations
+      .map(
+        violation =>
+          dedent`${printType(violation.type)}: ${printViolation(violation)}`,
+      )
+      .join("\n\n")
+  );
 };
 
 export { prettyPrintViolations, printResult };

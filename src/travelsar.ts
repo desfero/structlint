@@ -2,26 +2,30 @@ import * as micromatch from "micromatch";
 
 import { Folder, File } from "./types";
 import { DeepReadonly, nonNullable } from "./utils";
+import { ImportConfig } from "./config";
 
 type FileWithMatchedImports = {
   file: DeepReadonly<File>;
   matchedImports: string[];
+  matchedConfig: ImportConfig;
 };
 
 const findFilesWithImports = (
   { files }: DeepReadonly<Folder>,
-  importsGlobs: string[],
+  importConfigs: ImportConfig[],
 ): FileWithMatchedImports[] => {
   return Object.values(files).flatMap(file => {
     nonNullable(file);
 
-    const matchedImports = micromatch(file.imports, importsGlobs);
+    return importConfigs.flatMap(config => {
+      const matchedImports = micromatch(file.imports, config.glob);
 
-    if (matchedImports.length > 0) {
-      return [{ file, matchedImports }];
-    }
+      if (matchedImports.length > 0) {
+        return { file, matchedImports, matchedConfig: config };
+      }
 
-    return [];
+      return [];
+    });
   });
 };
 

@@ -9,11 +9,28 @@ const CONFIG_PATTERNS = ["**/.structlintrc"];
 
 const configExplorer = cosmiconfigSync(name);
 
+const disallowedImport = yup
+  .object({
+    glob: yup.string().required(),
+    message: yup.string(),
+  })
+  .transform((_, originalValue) => {
+    switch (typeof originalValue) {
+      case "string":
+        return {
+          glob: originalValue,
+          message: undefined,
+        };
+      default:
+        return disallowedImport.validateSync(originalValue, { strict: true });
+    }
+  });
+
 const structureSchema = yup.object({
   description: yup.string().required(),
   path: yup.string().required(),
   recursive: yup.bool().default(true),
-  disallowedImports: yup.array(yup.string()).required(),
+  disallowedImports: yup.array(disallowedImport).required(),
 });
 
 const configSchema = yup.object({
@@ -28,6 +45,8 @@ const configSchema = yup.object({
 });
 
 type Config = yup.InferType<typeof configSchema>;
+
+type ImportConfig = yup.InferType<typeof disallowedImport>;
 
 const loadConfigs = (): ReadonlyArray<Config> => {
   return globby
@@ -46,7 +65,11 @@ const loadConfigs = (): ReadonlyArray<Config> => {
         };
       }
     })
-    .map(config => configSchema.validateSync(config));
+    .map(config =>
+      configSchema.validateSync(config, {
+        stripUnknown: true,
+      }),
+    );
 };
 
-export { loadConfigs, Config };
+export { loadConfigs, Config, ImportConfig };

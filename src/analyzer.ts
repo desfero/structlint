@@ -3,10 +3,11 @@ import { createDisallowedImportViolation, Violation } from "./violations";
 import { getFolder } from "./parser";
 import { Folder } from "./types";
 import { DeepReadonly } from "./utils";
+import { ImportConfig } from "./config";
 
 export const analyze = async (
   directories: string[],
-  disallowedImports: string[],
+  disallowedImports: ImportConfig[],
   root: DeepReadonly<Folder>,
 ): Promise<Violation[]> => {
   return directories.flatMap(directory => {
@@ -18,7 +19,12 @@ export const analyze = async (
     );
 
     return filesWithMatchedImports.map(match =>
-      createDisallowedImportViolation(folder, match.file, match.matchedImports),
+      createDisallowedImportViolation(
+        folder,
+        match.file,
+        match.matchedImports,
+        match.matchedConfig,
+      ),
     );
   });
 };

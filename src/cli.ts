@@ -22,9 +22,11 @@ const runTask = async ({ relativePath, structure }: Config) => {
   const taskNested = await Promise.all(
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
-      const disallowedImports = structure.disallowedImports.map(imp =>
-        join(sep, relativePath, imp),
-      );
+
+      const disallowedImports = structure.disallowedImports.map(imp => ({
+        ...imp,
+        glob: join(sep, relativePath, imp.glob),
+      }));
 
       const files = await globby(path, {
         expandDirectories: structure.recursive,
