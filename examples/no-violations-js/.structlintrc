@@ -1,0 +1,19 @@
+{
+  "structure": [
+    {
+      "description": "Core application business logic",
+      "path": "./modules",
+      "disallowedImports": [
+        {
+            glob: /components/**/*",
+            message: "Business logic should never import UI components"
+        }
+      ]
+    },
+    {
+      "description": "UI components",
+      "path": "./components",
+      "disallowedImports": ["/lib/**/*"]
+    }
+  ]
+}

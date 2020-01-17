@@ -62,7 +62,7 @@ const run = async () => {
     const configs = loadConfigs();
 
     if (configs.length === 0) {
-      error(logBold.red("You need to specify structure config to run linter."));
+      log(logBold.red("You need to specify structure config to run linter."));
       terminate();
     }
 
