@@ -1,6 +1,6 @@
 import { findFilesWithImports } from "./travelsar";
 import { createDisallowedImportViolation, Violation } from "./violations";
-import { getFolder } from "./parser";
+import { getFolder } from "./parsers/parser-babel";
 import { Folder } from "./types";
 import { DeepReadonly } from "./utils";
 import { ImportConfig } from "./config";

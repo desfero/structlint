@@ -1,11 +1,12 @@
-import * as globby from "globby";
 import * as chalk from "chalk";
 import { join, sep } from "path";
 
-import { parse } from "./parser";
+import { parse } from "./parsers";
 import { analyze } from "./analyzer";
 import { prettyPrintViolations, printResult } from "./printer";
 import { Config, loadConfigs } from "./config";
+import { getRootFolder } from "./parsers/parser-babel";
+import { getPathFilesAndDirectories } from "./utils";
 
 const log = console.log;
 const error = console.error;
@@ -28,25 +29,15 @@ const runTask = async ({ relativePath, structure }: Config) => {
         glob: join(sep, relativePath, imp.glob),
       }));
 
-      const files = await globby(path, {
+      const { files, directories } = await getPathFilesAndDirectories(path, {
         expandDirectories: structure.recursive,
-        onlyFiles: true,
       });
 
-      const root = parse(files);
+      files.forEach(parse);
 
-      const directories = await globby(path, {
-        expandDirectories: structure.recursive,
-        onlyDirectories: true,
-      });
+      const root = getRootFolder();
 
-      const violations = await analyze(
-        [path, ...directories],
-        disallowedImports,
-        root,
-      );
-
-      return violations;
+      return await analyze([path, ...directories], disallowedImports, root);
     }),
   );
 

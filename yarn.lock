@@ -952,6 +952,11 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
+"@types/lodash@^4.14.149":
+  version "4.14.149"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.149.tgz#1342d63d948c6062838fbf961012f74d4e638440"
+  integrity sha512-ijGqzZt/b7BfzcK9vTrS6MFljQRPn5BFWOx8oE0GYxribu6uV+aA9zZuXI1zc/etK9E8nrgdoF2+LgUw7+9tJQ==
+
 "@types/micromatch@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@types/micromatch/-/micromatch-3.1.1.tgz#98eac88894da6606c2690624a9893a59c812d9fa"
@@ -2869,6 +2874,11 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+linguist-languages@^7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/linguist-languages/-/linguist-languages-7.7.0.tgz#c069731f8b307ce301980a4bac4b81bf06a2c351"
+  integrity sha512-6vR1OgfD/YK1xgqVBT3aUx9zurSVeHUsXpVyTilT1o7LW6MNAcGmWy5wwmQAAhvEXxG2PZmktHbQiGtJ5hpGkg==
+
 load-json-file@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-4.0.0.tgz#2f5f45ab91e33216234fd53adab668eb4ec0993b"
@@ -2886,6 +2896,11 @@ locate-path@^3.0.0:
   dependencies:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
+
+lodash.partition@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.partition/-/lodash.partition-4.6.0.tgz#a38e46b73469e0420b0da1212e66d414be364ba4"
+  integrity sha1-o45GtzRp4EILDaEhLmbUFL42S6Q=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"

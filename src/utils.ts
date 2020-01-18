@@ -1,3 +1,7 @@
+import { partition } from "lodash/fp";
+import { sep } from "path";
+import * as globby from "globby";
+
 /**
  *  Cast a `value` to exclude `null` and `undefined`.
  *  Throws if either `null` or `undefined` was passed
@@ -27,4 +31,25 @@ export type DeepReadonlyObject<T> = {
   readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
 
-export { nonNullable, Primitive, DeepReadonly };
+type TOptions = { expandDirectories: boolean };
+
+const getPathFilesAndDirectories = async (
+  path: string,
+  { expandDirectories }: TOptions,
+) => {
+  const filesAndFolders = await globby(path, {
+    expandDirectories,
+    onlyFiles: false,
+    gitignore: true,
+    markDirectories: true,
+  });
+
+  const [directories, files] = partition(
+    path => path.endsWith(sep),
+    filesAndFolders,
+  );
+
+  return { directories, files };
+};
+
+export { nonNullable, Primitive, DeepReadonly, getPathFilesAndDirectories };

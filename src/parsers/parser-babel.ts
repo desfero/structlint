@@ -1,9 +1,10 @@
 import { readFileSync } from "fs";
-import { basename, dirname, join, resolve, sep } from "path";
+import { basename, dirname, join, resolve, sep, extname } from "path";
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
-import { File, Folder } from "./types";
-import { DeepReadonly } from "./utils";
+import { File, Folder } from "../types";
+import { DeepReadonly } from "../utils";
+import { getLanguageExtensions } from "./utils";
 
 const internalRoot: Folder = {
   parent: undefined,
@@ -12,6 +13,8 @@ const internalRoot: Folder = {
   files: {},
   folders: {},
 };
+
+const getRootFolder = (): DeepReadonly<Folder> => internalRoot;
 
 const getFolder = (
   path: string,
@@ -136,24 +139,37 @@ const setFileImports = (
   return root;
 };
 
-const parse = (files: string[]): DeepReadonly<Folder> => {
-  return files.reduce((acc, file) => {
-    try {
-      const fileBuffer = readFileSync(file);
+const parse = (filePath: string): DeepReadonly<Folder> => {
+  try {
+    const fileBuffer = readFileSync(filePath);
 
-      const fileContent = fileBuffer.toString();
+    const fileContent = fileBuffer.toString();
 
-      const relativeImports = getImports(file, fileContent);
+    const relativeImports = getImports(filePath, fileContent);
 
-      if (relativeImports.length) {
-        return setFileImports(file, relativeImports, acc);
-      }
-
-      return acc;
-    } catch (e) {
-      throw new Error(`Failed to parse "${file}"\n${e.message}`);
+    if (relativeImports.length) {
+      return setFileImports(filePath, relativeImports, internalRoot);
     }
-  }, internalRoot);
+
+    return internalRoot;
+  } catch (e) {
+    throw new Error(`Failed to parse "${filePath}"\n${e.message}`);
+  }
 };
 
-export { getFolder, getFile, parse };
+const extensions = getLanguageExtensions([
+  "JavaScript",
+  "JSX",
+  "TSX",
+  "TypeScript",
+]);
+
+const canParse = (filePath: string): boolean => {
+  const ext = extname(filePath);
+
+  return extensions.includes(ext);
+};
+
+const babelParser = { name: "babel", canParse, parse };
+
+export { getFolder, getFile, babelParser, getRootFolder };
