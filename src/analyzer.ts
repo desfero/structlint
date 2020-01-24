@@ -1,8 +1,7 @@
 import { findFilesWithImports } from "./travelsar";
 import { createDisallowedImportViolation, Violation } from "./violations";
 import { getFolder } from "./parsers/parser-babel";
-import { Folder } from "./types";
-import { DeepReadonly } from "./utils";
+import { DeepReadonly, Folder } from "./types";
 import { ImportConfig } from "./config";
 
 export const analyze = async (

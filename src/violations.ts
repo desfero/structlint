@@ -1,5 +1,4 @@
-import { File, Folder } from "./types";
-import { DeepReadonly } from "./utils";
+import { DeepReadonly, File, Folder } from "./types";
 import { ImportConfig } from "./config";
 
 enum ViolationType {

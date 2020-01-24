@@ -1,7 +1,7 @@
 import * as micromatch from "micromatch";
 
-import { Folder, File } from "./types";
-import { DeepReadonly, nonNullable } from "./utils";
+import { Folder, File, DeepReadonly } from "./types";
+import { nonNullable } from "./utils";
 import { ImportConfig } from "./config";
 
 type FileWithMatchedImports = {

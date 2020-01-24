@@ -5,7 +5,7 @@
       "path": "./modules",
       "disallowedImports": [
         {
-            glob: /components/**/*",
+            glob: "./components/**/*",
             message: "Business logic should never import UI components"
         }
       ]
@@ -13,7 +13,7 @@
     {
       "description": "UI components",
       "path": "./components",
-      "disallowedImports": ["/lib/**/*"]
+      "disallowedImports": ["./lib/**/*"]
     }
   ]
 }

@@ -1,3 +1,17 @@
+type Primitive = string | number | boolean | undefined | null;
+
+type DeepReadonly<T> = T extends Primitive
+  ? T
+  : T extends Array<infer U>
+  ? ReadonlyArray<U>
+  : T extends Function
+  ? T
+  : DeepReadonlyObject<T>;
+
+type DeepReadonlyObject<T> = {
+  readonly [P in keyof T]: DeepReadonly<T[P]>;
+};
+
 type Folder = {
   parent: undefined | Folder;
   path: string;
@@ -13,4 +27,4 @@ type File = {
   imports: string[];
 };
 
-export { File, Folder };
+export { File, Folder, Primitive, DeepReadonly, DeepReadonlyObject };

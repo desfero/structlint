@@ -52,16 +52,16 @@ const loadConfigs = (): ReadonlyArray<Config> => {
   return globby
     .sync(CONFIG_PATTERNS)
     .map(file => configExplorer.load(file))
-    .flatMap(result => {
-      if (result !== null) {
+    .flatMap(explorer => {
+      if (explorer !== null) {
         // filter all empty configs
-        if (result.isEmpty) {
+        if (explorer.isEmpty) {
           return [];
         }
 
         return {
-          ...result.config,
-          relativePath: relative(process.cwd(), dirname(result.filepath)),
+          ...explorer.config,
+          relativePath: relative(process.cwd(), dirname(explorer.filepath)),
         };
       }
     })

@@ -3,7 +3,7 @@
     {
       "description": "Shared components",
       "path": "./shared",
-      "disallowedImports": ["/*"]
+      "disallowedImports": ["./*"]
     },
   ]
 }

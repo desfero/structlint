@@ -6,7 +6,11 @@ import { analyze } from "./analyzer";
 import { prettyPrintViolations, printResult } from "./printer";
 import { Config, loadConfigs } from "./config";
 import { getRootFolder } from "./parsers/parser-babel";
-import { getPathFilesAndDirectories } from "./utils";
+import {
+  getImportType,
+  getPathFilesAndDirectories,
+  IMPORT_TYPE,
+} from "./utils";
 
 const log = console.log;
 const error = console.error;
@@ -24,10 +28,18 @@ const runTask = async ({ relativePath, structure }: Config) => {
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
 
-      const disallowedImports = structure.disallowedImports.map(imp => ({
-        ...imp,
-        glob: join(sep, relativePath, imp.glob),
-      }));
+      const disallowedImports = structure.disallowedImports.map(imp => {
+        const importType = getImportType(imp.glob);
+
+        if (importType === IMPORT_TYPE.RELATIVE) {
+          return {
+            ...imp,
+            glob: join(sep, relativePath, imp.glob),
+          };
+        }
+
+        return imp;
+      });
 
       const { files, directories } = await getPathFilesAndDirectories(path, {
         expandDirectories: structure.recursive,

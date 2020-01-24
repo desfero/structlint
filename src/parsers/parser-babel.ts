@@ -2,8 +2,8 @@ import { readFileSync } from "fs";
 import { basename, dirname, join, resolve, sep, extname } from "path";
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
-import { File, Folder } from "../types";
-import { DeepReadonly } from "../utils";
+import { DeepReadonly, File, Folder } from "../types";
+import { getImportType, IMPORT_TYPE } from "../utils";
 import { getLanguageExtensions } from "./utils";
 
 const internalRoot: Folder = {
@@ -125,21 +125,21 @@ const getImports = (fileName: string, fileContent: string) => {
   return imports;
 };
 
-const setFileImports = (
-  path: string,
-  relativeImports: string[],
-  root: Folder,
-) => {
-  const file = getFileInternal(path, root);
+const setFileImports = (path: string, relativeImports: string[]) => {
+  const file = getFileInternal(path, internalRoot);
 
-  file.imports = relativeImports.map(importPath =>
-    resolve(file.parent.path, importPath),
-  );
+  file.imports = relativeImports.map(importPath => {
+    const importType = getImportType(importPath);
 
-  return root;
+    if (importType === IMPORT_TYPE.RELATIVE) {
+      return resolve(file.parent.path, importPath);
+    }
+
+    return importPath;
+  });
 };
 
-const parse = (filePath: string): DeepReadonly<Folder> => {
+const parse = (filePath: string): void => {
   try {
     const fileBuffer = readFileSync(filePath);
 
@@ -148,10 +148,8 @@ const parse = (filePath: string): DeepReadonly<Folder> => {
     const relativeImports = getImports(filePath, fileContent);
 
     if (relativeImports.length) {
-      return setFileImports(filePath, relativeImports, internalRoot);
+      setFileImports(filePath, relativeImports);
     }
-
-    return internalRoot;
   } catch (e) {
     throw new Error(`Failed to parse "${filePath}"\n${e.message}`);
   }

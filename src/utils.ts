@@ -17,20 +17,6 @@ function nonNullable<T>(
   }
 }
 
-type Primitive = string | number | boolean | undefined | null;
-
-type DeepReadonly<T> = T extends Primitive
-  ? T
-  : T extends Array<infer U>
-  ? ReadonlyArray<U>
-  : T extends Function
-  ? T
-  : DeepReadonlyObject<T>;
-
-export type DeepReadonlyObject<T> = {
-  readonly [P in keyof T]: DeepReadonly<T[P]>;
-};
-
 type TOptions = { expandDirectories: boolean };
 
 const getPathFilesAndDirectories = async (
@@ -52,4 +38,22 @@ const getPathFilesAndDirectories = async (
   return { directories, files };
 };
 
-export { nonNullable, Primitive, DeepReadonly, getPathFilesAndDirectories };
+enum IMPORT_TYPE {
+  NAMED = "named",
+  RELATIVE = "relative",
+  ABSOLUTE = "absolute",
+}
+
+const getImportType = (importPath: string) => {
+  if (importPath.startsWith(".")) {
+    return IMPORT_TYPE.RELATIVE;
+  }
+
+  if (importPath.startsWith("/")) {
+    return IMPORT_TYPE.ABSOLUTE;
+  }
+
+  return IMPORT_TYPE.NAMED;
+};
+
+export { nonNullable, getPathFilesAndDirectories, getImportType, IMPORT_TYPE };
