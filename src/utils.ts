@@ -1,6 +1,12 @@
-import { partition } from "lodash/fp";
+import partition from "lodash/fp/partition";
 import { sep } from "path";
-import * as globby from "globby";
+import { debug as debugP } from "debug";
+import globby from "globby";
+import { DeepReadonly, Folder, Demand } from "./types";
+import compact from "lodash/fp/compact";
+import { StructlintError } from "./errors";
+
+const structLintDebug = debugP("struct-lint");
 
 /**
  *  Cast a `value` to exclude `null` and `undefined`.
@@ -11,7 +17,7 @@ function nonNullable<T>(
   message?: string,
 ): asserts value is NonNullable<T> {
   if (value === undefined || value === null) {
-    throw new Error(
+    throw new StructlintError(
       message || `Non nullable values expected, received ${value}`,
     );
   }
@@ -38,6 +44,25 @@ const getPathFilesAndDirectories = async (
   return { directories, files };
 };
 
+/**
+ * Check if a given demand is a folder
+ */
+const isFolder = (
+  demand: DeepReadonly<Demand>,
+): demand is DeepReadonly<Folder> => "folders" in demand;
+
+/**
+ * Get all files of a given demand.
+ * If demand is a file itself wraps the file into array
+ */
+const getFiles = (demand: DeepReadonly<Demand>) => {
+  if (!isFolder(demand)) {
+    return [demand];
+  }
+
+  return compact(Object.values(demand.files));
+};
+
 enum IMPORT_TYPE {
   NAMED = "named",
   RELATIVE = "relative",
@@ -56,4 +81,15 @@ const getImportType = (importPath: string) => {
   return IMPORT_TYPE.NAMED;
 };
 
-export { nonNullable, getPathFilesAndDirectories, getImportType, IMPORT_TYPE };
+const debug = (module: string, message: string) =>
+  structLintDebug.extend(module)(message);
+
+export {
+  nonNullable,
+  getPathFilesAndDirectories,
+  getImportType,
+  IMPORT_TYPE,
+  debug,
+  isFolder,
+  getFiles,
+};

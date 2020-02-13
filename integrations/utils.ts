@@ -10,13 +10,17 @@ const structLint = ({ cwd }: { cwd: string }) =>
         env: {
           ...process.env,
           // Turn off chalk color support
-          // to make shapshot more readable
+          // to make snapshot more readable
           FORCE_COLOR: "0",
         },
       },
-      (error, stdout) => {
+      (error, stdout, stderr) => {
         if (!stdout) {
           pReject(new Error(`Failed to run structlint. Error: ${error}`));
+        }
+
+        if (stderr) {
+          pReject(new Error(`Failed to run structlint. Error: ${stdErr}`));
         }
 
         pResolve({ stdout, code: error ? error.code : 0 });

@@ -27,4 +27,6 @@ type File = {
   imports: string[];
 };
 
-export { File, Folder, Primitive, DeepReadonly, DeepReadonlyObject };
+type Demand = Folder | File;
+
+export { File, Folder, Primitive, DeepReadonly, DeepReadonlyObject, Demand };

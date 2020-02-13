@@ -1,29 +1,27 @@
 import { findFilesWithImports } from "./travelsar";
 import { createDisallowedImportViolation, Violation } from "./violations";
-import { getFolder } from "./parsers/parser-babel";
-import { DeepReadonly, Folder } from "./types";
+import { getDemand } from "./parsers/parser-babel";
 import { ImportConfig } from "./config";
+import { getFiles } from "./utils";
 
 export const analyze = async (
-  directories: string[],
+  paths: string[],
   disallowedImports: ImportConfig[],
-  root: DeepReadonly<Folder>,
-): Promise<Violation[]> => {
-  return directories.flatMap(directory => {
-    const folder = getFolder(directory, root);
+): Promise<Violation[]> =>
+  paths.flatMap(path => {
+    const demand = getDemand(path);
 
     const filesWithMatchedImports = findFilesWithImports(
-      folder,
+      getFiles(demand),
       disallowedImports,
     );
 
     return filesWithMatchedImports.map(match =>
       createDisallowedImportViolation(
-        folder,
+        demand,
         match.file,
         match.matchedImports,
         match.matchedConfig,
       ),
     );
   });
-};

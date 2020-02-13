@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="structlint [violations-ts]" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/bin/structlint.js" working-dir="$PROJECT_DIR$/examples/violations-ts">
+    <method v="2" />
+  </configuration>
+</component>

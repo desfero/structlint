@@ -1,6 +1,8 @@
+import chalk from "chalk";
+import dedent from "dedent";
+
 import { Violation, ViolationByType, ViolationType } from "./violations";
-import * as chalk from "chalk";
-import * as dedent from "dedent";
+import { NotYetImplementedError } from "./errors";
 
 const bold = chalk.bold;
 
@@ -12,7 +14,7 @@ const printViolation = (violation: Violation) => {
       return logDisallowedImportViolation(violation);
 
     default:
-      throw new Error("Not yet implemented");
+      throw new NotYetImplementedError();
   }
 };
 

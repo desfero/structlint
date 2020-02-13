@@ -1,12 +1,12 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import { join, sep } from "path";
 
 import { parse } from "./parsers";
 import { analyze } from "./analyzer";
-import { prettyPrintViolations, printResult } from "./printer";
+import { prettyPrintViolations, printResult } from "./formatter";
 import { Config, loadConfigs } from "./config";
-import { getRootFolder } from "./parsers/parser-babel";
 import {
+  debug,
   getImportType,
   getPathFilesAndDirectories,
   IMPORT_TYPE,
@@ -14,7 +14,6 @@ import {
 
 const log = console.log;
 const error = console.error;
-const debug = console.debug;
 
 const logBold = chalk.bold;
 
@@ -28,6 +27,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
 
+      // remap relative import paths from relative to absolute
       const disallowedImports = structure.disallowedImports.map(imp => {
         const importType = getImportType(imp.glob);
 
@@ -47,9 +47,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
 
       files.forEach(parse);
 
-      const root = getRootFolder();
-
-      return await analyze([path, ...directories], disallowedImports, root);
+      return await analyze([path, ...directories], disallowedImports);
     }),
   );
 
@@ -58,7 +56,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
 
 const run = async () => {
   try {
-    debug(`Root: ${process.cwd()}`);
+    debug("cli", `Root: ${process.cwd()}`);
 
     log("Resolving configs...");
 

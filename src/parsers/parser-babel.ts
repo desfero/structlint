@@ -2,9 +2,10 @@ import { readFileSync } from "fs";
 import { basename, dirname, join, resolve, sep, extname } from "path";
 import * as parser from "@babel/parser";
 import traverse from "@babel/traverse";
-import { DeepReadonly, File, Folder } from "../types";
-import { getImportType, IMPORT_TYPE } from "../utils";
+import { DeepReadonly, Demand, File, Folder } from "../types";
+import { getImportType, IMPORT_TYPE, isFolder } from "../utils";
 import { getLanguageExtensions } from "./utils";
+import { FileParsingFailedError, FolderNotFoundError } from "../errors";
 
 const internalRoot: Folder = {
   parent: undefined,
@@ -16,22 +17,24 @@ const internalRoot: Folder = {
 
 const getRootFolder = (): DeepReadonly<Folder> => internalRoot;
 
-const getFolder = (
-  path: string,
-  root: DeepReadonly<Folder>,
-): DeepReadonly<Folder> => {
-  if (internalRoot !== root) {
-    throw new Error("Invalid root object passed.");
-  }
+/**
+ * For the given path returns either Folder or File
+ */
+const getDemand = (path: string): DeepReadonly<Demand> =>
+  getDemandInternal(path, internalRoot);
 
-  return getFolderInternal(path, internalRoot);
-};
-
-const getFolderInternal = (path: string, currentFolder: Folder): Folder => {
+const getDemandInternal = (path: string, currentFolder: Folder): Demand => {
   const [current, ...rest] = path.split(sep);
 
   if (current === ".") {
     return currentFolder;
+  }
+
+  const file = currentFolder.files[current];
+
+  // if the path is a file path return the file
+  if (file) {
+    return file;
   }
 
   let folder = currentFolder.folders[current];
@@ -46,17 +49,10 @@ const getFolderInternal = (path: string, currentFolder: Folder): Folder => {
     };
   }
 
-  return getFolderInternal(join(...rest), folder);
+  return getDemandInternal(join(...rest), folder);
 };
 
-const getFile = (
-  path: string,
-  root: DeepReadonly<Folder>,
-): DeepReadonly<File> => {
-  if (internalRoot !== root) {
-    throw new Error("Invalid root object passed.");
-  }
-
+const getFile = (path: string): DeepReadonly<File> => {
   return getFileInternal(path, internalRoot);
 };
 
@@ -64,15 +60,19 @@ const getFileInternal = (path: string, root: Folder): File => {
   const fileName = basename(path);
   const dirName = dirname(path);
 
-  const folder = getFolderInternal(dirName, root);
+  const demand = getDemandInternal(dirName, root);
 
-  let file = folder.files[fileName];
+  if (!isFolder(demand)) {
+    throw new FolderNotFoundError(path);
+  }
+
+  let file = demand.files[fileName];
 
   if (file === undefined) {
-    file = folder.files[fileName] = {
-      path: join(folder.path, fileName),
+    file = demand.files[fileName] = {
+      path: join(demand.path, fileName),
       name: fileName,
-      parent: folder,
+      parent: demand,
       imports: [],
     };
   }
@@ -151,7 +151,7 @@ const parse = (filePath: string): void => {
       setFileImports(filePath, relativeImports);
     }
   } catch (e) {
-    throw new Error(`Failed to parse "${filePath}"\n${e.message}`);
+    throw new FileParsingFailedError(filePath, e.message);
   }
 };
 
@@ -170,4 +170,4 @@ const canParse = (filePath: string): boolean => {
 
 const babelParser = { name: "babel", canParse, parse };
 
-export { getFolder, getFile, babelParser, getRootFolder };
+export { getDemand, getFile, babelParser, getRootFolder };

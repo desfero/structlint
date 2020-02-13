@@ -1,7 +1,6 @@
-import * as micromatch from "micromatch";
+import micromatch from "micromatch";
 
-import { Folder, File, DeepReadonly } from "./types";
-import { nonNullable } from "./utils";
+import { File, DeepReadonly } from "./types";
 import { ImportConfig } from "./config";
 
 type FileWithMatchedImports = {
@@ -11,13 +10,11 @@ type FileWithMatchedImports = {
 };
 
 const findFilesWithImports = (
-  { files }: DeepReadonly<Folder>,
+  files: DeepReadonly<File>[],
   importConfigs: ImportConfig[],
-): FileWithMatchedImports[] => {
-  return Object.values(files).flatMap(file => {
-    nonNullable(file);
-
-    return importConfigs.flatMap(config => {
+): FileWithMatchedImports[] =>
+  files.flatMap(file =>
+    importConfigs.flatMap(config => {
       const matchedImports = micromatch(file.imports, config.glob);
 
       if (matchedImports.length > 0) {
@@ -25,8 +22,7 @@ const findFilesWithImports = (
       }
 
       return [];
-    });
-  });
-};
+    }),
+  );
 
 export { findFilesWithImports, FileWithMatchedImports };

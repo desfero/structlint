@@ -15,6 +15,11 @@
       "description": "UI components",
       "path": "./components",
       "disallowedImports": ["./lib/**/*"]
+    },
+    {
+      "description": "Store creation logic",
+      "path": "./store.ts",
+      "disallowedImports": ["react"]
     }
   ]
 }

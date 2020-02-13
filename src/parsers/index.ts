@@ -1,4 +1,5 @@
 import { babelParser } from "./parser-babel";
+import { MoreThanOneParserError } from "../errors";
 
 const parsers = [babelParser];
 
@@ -6,10 +7,9 @@ const parse = (filePath: string) => {
   const matchedParsers = parsers.filter(parser => parser.canParse(filePath));
 
   if (matchedParsers.length > 1) {
-    throw new Error(
-      `More than one parsed matched "${filePath}": ${matchedParsers
-        .map(parser => parser.name)
-        .join(", ")}.`,
+    throw new MoreThanOneParserError(
+      filePath,
+      matchedParsers.map(parser => parser.name),
     );
   }
 
