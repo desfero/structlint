@@ -3,7 +3,7 @@ import defaultTo from "lodash/fp/defaultTo";
 import { DeepReadonly, Demand, File, Folder } from "./types";
 import { basename, dirname, join, resolve, sep } from "path";
 import { getImportType, IMPORT_TYPE, isFolder } from "./utils";
-import { FolderNotFoundError } from "./errors";
+import { FileNotFoundError, FolderNotFoundError } from "./errors";
 
 const storeInternalRoot: Folder = {
   parent: undefined,
@@ -59,7 +59,7 @@ const getFile = (path: string): DeepReadonly<File> => {
   const file = getFileInternal(path, storeInternalRoot);
 
   if (!file) {
-    throw new Error("File missing");
+    throw new FileNotFoundError(path);
   }
 
   return file;

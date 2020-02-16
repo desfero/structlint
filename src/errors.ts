@@ -10,6 +10,12 @@ class FolderNotFoundError extends StructlintError {
   }
 }
 
+class FileNotFoundError extends StructlintError {
+  constructor(filePath: string) {
+    super(`No file found under ${filePath}`);
+  }
+}
+
 class NotYetImplementedError extends StructlintError {
   constructor() {
     super(`Not yet implemented`);
@@ -38,4 +44,5 @@ export {
   FileParsingFailedError,
   NotYetImplementedError,
   MoreThanOneParserError,
+  FileNotFoundError,
 };
