@@ -1,6 +1,6 @@
 import { findFilesWithImports } from "./travelsar";
 import { createDisallowedImportViolation, Violation } from "./violations";
-import { getDemand } from "./parsers/parser-babel";
+import { getDemand } from "./store";
 import { ImportConfig } from "./config";
 import { getFiles } from "./utils";
 
