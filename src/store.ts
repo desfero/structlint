@@ -21,6 +21,7 @@ const defaultToEmpty = defaultTo({});
 const getDemand = (path: string): DeepReadonly<Demand> =>
   getDemandInternal(path, storeInternalRoot);
 
+// TODO: Refactor to just throw in case folder do not exist and on top of that introduce `set` method
 const getDemandInternal = (path: string, currentFolder: Folder): Demand => {
   const [current, ...rest] = path.split(sep);
 
