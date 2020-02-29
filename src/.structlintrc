@@ -1,0 +1,14 @@
+{
+  "structure": [
+    {
+      "description": "CLI",
+      "path": "./cli",
+      "disallowedImports": [
+        {
+            glob: "./parsers/**/*",
+            message: "Parser should not be used on the CLI level"
+        },
+      ]
+    },
+  ]
+}

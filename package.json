@@ -16,13 +16,14 @@
   ],
   "repository": "desfero/structlint",
   "bin": "./bin/structlint.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "index.js",
   "license": "MIT",
   "author": "Pawel Lula (desfero)",
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "jest",
+    "lint": "cd ./src && structlint",
     "format": "prettier --check '**/*.{ts,tsx,js,json,md,gql}'",
     "format:fix": "prettier --write '**/*.{ts,tsx,js,json,md,gql}'"
   },
@@ -54,6 +55,7 @@
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "structlint": "^0.3.0",
     "ts-node": "^8.5.4",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
