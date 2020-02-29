@@ -1,33 +1,21 @@
-import chalk from "chalk";
 import { join, sep } from "path";
 
-import { parse } from "./parsers";
-import { analyze } from "./analyzer";
-import { prettyPrintViolations, printResult } from "./formatter";
-import { Config, loadConfigs } from "./config";
+import { Config } from "../config";
 import {
   debug,
   getImportType,
   getPathFilesAndDirectories,
   IMPORT_TYPE,
-} from "./utils";
-
-const log = console.log;
-const error = console.error;
-
-const logBold = chalk.bold;
-
-const terminate = () => {
-  // terminate the process with non zero exit code
-  process.exit(1);
-};
+} from "../utils";
+import { parse } from "../parsers";
+import { analyze } from "../analyzer";
 
 const runTask = async ({ relativePath, structure }: Config) => {
   const taskNested = await Promise.all(
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
 
-      debug("task", `Running task for ${path}`);
+      debug("imports-task", `Running task for ${path}`);
 
       // remap relative import paths from relative to absolute
       const disallowedImports = structure.disallowedImports.map(imp => {
@@ -44,7 +32,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
       });
 
       debug(
-        "task",
+        "imports-task",
         `Disallowed imports ${disallowedImports
           .map(imp => imp.glob)
           .join(", ")}`,
@@ -65,7 +53,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
       });
 
       debug(
-        "task",
+        "imports-task",
         `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
       );
 
@@ -73,9 +61,9 @@ const runTask = async ({ relativePath, structure }: Config) => {
         expandDirectories: structure.recursive,
       });
 
-      debug("task", `Files to parse ${files.join(", ")}`);
+      debug("imports-task", `Files to parse ${files.join(", ")}`);
 
-      debug("task", `Directories to lint ${directories.join(", ")}`);
+      debug("imports-task", `Directories to lint ${directories.join(", ")}`);
 
       files.forEach(parse);
 
@@ -90,37 +78,12 @@ const runTask = async ({ relativePath, structure }: Config) => {
   return taskNested.flat(Infinity);
 };
 
-const run = async () => {
-  try {
-    debug("cli", `Root: ${process.cwd()}`);
-
-    log("Resolving configs...");
-
-    const configs = loadConfigs();
-
-    if (configs.length === 0) {
-      log(logBold.red("You need to specify structure config to run linter."));
-      terminate();
-    }
-
-    log("Linting folder structure...");
-
-    const violationsNested = await Promise.all(configs.map(runTask));
-
-    const violations = violationsNested.flat(Infinity);
-
-    log(printResult(violations));
-
-    if (violations.length > 0) {
-      log(prettyPrintViolations(violations));
-
-      terminate();
-    }
-  } catch (e) {
-    error(e);
-
-    terminate();
-  }
+/**
+ * Task to analyse import rules validity
+ */
+const importsTask = {
+  name: "imports-task",
+  runTask,
 };
 
-export { run };
+export { importsTask };

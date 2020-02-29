@@ -1,8 +1,8 @@
 import chalk from "chalk";
 import dedent from "dedent";
 
-import { Violation, ViolationByType, ViolationType } from "./violations";
-import { NotYetImplementedError } from "./errors";
+import { Violation, ViolationByType, ViolationType } from "../violations";
+import { NotYetImplementedError } from "../errors";
 
 const bold = chalk.bold;
 
