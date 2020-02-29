@@ -2,6 +2,7 @@ import micromatch from "micromatch";
 
 import { File, DeepReadonly } from "./types";
 import { ImportConfig } from "./config";
+import { debug } from "./utils";
 
 type FileWithMatchedImports = {
   file: DeepReadonly<File>;
@@ -15,7 +16,7 @@ const findFilesWithImports = (
 ): FileWithMatchedImports[] =>
   files.flatMap(file =>
     importConfigs.flatMap(config => {
-      const matchedImports = micromatch(file.imports, config.glob);
+      const matchedImports = findMatchedImports(file, config);
 
       if (matchedImports.length > 0) {
         return { file, matchedImports, matchedConfig: config };
@@ -25,4 +26,25 @@ const findFilesWithImports = (
     }),
   );
 
-export { findFilesWithImports, FileWithMatchedImports };
+const findMatchedImports = (
+  file: DeepReadonly<File>,
+  importConfig: ImportConfig,
+) => {
+  debug(
+    "traversal",
+    `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,
+  );
+
+  const matchedImports = micromatch(file.imports, importConfig.glob);
+
+  debug(
+    "traversal",
+    `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
+      "\n",
+    )}`,
+  );
+
+  return matchedImports;
+};
+
+export { findFilesWithImports, FileWithMatchedImports, findMatchedImports };

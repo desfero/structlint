@@ -27,6 +27,8 @@ const runTask = async ({ relativePath, structure }: Config) => {
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
 
+      debug("task", `Running task for ${path}`);
+
       // remap relative import paths from relative to absolute
       const disallowedImports = structure.disallowedImports.map(imp => {
         const importType = getImportType(imp.glob);
@@ -41,13 +43,47 @@ const runTask = async ({ relativePath, structure }: Config) => {
         return imp;
       });
 
+      debug(
+        "task",
+        `Disallowed imports ${disallowedImports
+          .map(imp => imp.glob)
+          .join(", ")}`,
+      );
+
+      // remap relative import paths from relative to absolute
+      const allowedImports = structure.allowedImports.map(imp => {
+        const importType = getImportType(imp.glob);
+
+        if (importType === IMPORT_TYPE.RELATIVE) {
+          return {
+            ...imp,
+            glob: join(sep, relativePath, imp.glob),
+          };
+        }
+
+        return imp;
+      });
+
+      debug(
+        "task",
+        `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
+      );
+
       const { files, directories } = await getPathFilesAndDirectories(path, {
         expandDirectories: structure.recursive,
       });
 
+      debug("task", `Files to parse ${files.join(", ")}`);
+
+      debug("task", `Directories to lint ${directories.join(", ")}`);
+
       files.forEach(parse);
 
-      return await analyze([path, ...directories], disallowedImports);
+      return await analyze(
+        [path, ...directories],
+        disallowedImports,
+        allowedImports,
+      );
     }),
   );
 
