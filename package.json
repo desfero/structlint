@@ -55,7 +55,7 @@
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
-    "structlint": "^0.3.0",
+    "structlint": "^0.3.1",
     "ts-node": "^8.5.4",
     "tslib": "^1.10.0",
     "typescript": "^3.7.4"
