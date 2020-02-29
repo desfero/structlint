@@ -16,7 +16,7 @@
   ],
   "repository": "desfero/structlint",
   "bin": "./bin/structlint.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "index.js",
   "license": "MIT",
   "author": "Pawel Lula (desfero)",
