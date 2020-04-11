@@ -44,10 +44,43 @@ then add the config into a `.structlintrc` file. For example:
 }
 ```
 
+You can have a single config file at the root of your project or multiple configs, one for every major sub directory.
+
+```
+- src
+  - reducers
+    - .structlintrc
+    - user.reducer.js
+    - settings.reducer.js
+    - profile.reducer.js
+  - components
+    - .structlintrc
+    - Header
+      - Header.js
+      - Header.scss
+    - Footer
+      - Header.js
+      - Header.scss
+   - sagas
+     - .structlintrc
+     - auth.saga.js
+     - profile.saga.js
+   - utils
+     - .structlintrc
+     - color.js
+     - url.js
+- tests
+  - .structlintrc
+  - user-tests
+  - settings-tests
+
+```
+ 
+
 ## Usage
 
 ```sh
-<path-to-node-modules>/.bin/structlint structlint
+<path-to-node-modules>/.bin/structlint
 ```
 
 OR
