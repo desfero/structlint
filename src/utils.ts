@@ -2,8 +2,10 @@ import partition from "lodash/fp/partition";
 import { sep } from "path";
 import { debug as debugP } from "debug";
 import globby from "globby";
-import { DeepReadonly, Folder, Demand } from "./types";
 import compact from "lodash/fp/compact";
+import curry from "lodash/fp/curry";
+
+import { DeepReadonly, Folder, Demand } from "./types";
 import { StructlintError } from "./errors";
 
 const structLintDebug = debugP("struct-lint");
@@ -81,8 +83,9 @@ const getImportType = (importPath: string) => {
   return IMPORT_TYPE.NAMED;
 };
 
-const debug = (module: string, message: string) =>
-  structLintDebug.extend(module)(message);
+const debug = curry((module: string, message: string) =>
+  structLintDebug.extend(module)(message),
+);
 
 export {
   nonNullable,

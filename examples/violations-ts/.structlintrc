@@ -19,7 +19,7 @@
     {
       "description": "Store creation logic",
       "path": "./store.ts",
-      "disallowedImports": ["react"]
+      "disallowedImports": ["react", "./lib/**/*"]
     }
   ]
 }

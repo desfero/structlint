@@ -1,4 +1,4 @@
-import { findFilesWithImports } from "./travelsar";
+import { findFilesWithImports } from "./traversar";
 import { createDisallowedImportViolation, Violation } from "./violations";
 import { getDemand } from "./store";
 import { ImportConfig } from "./config";

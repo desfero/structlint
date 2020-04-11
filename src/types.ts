@@ -1,3 +1,5 @@
+import { ImportDefinition } from "./parsers/types";
+
 type Primitive = string | number | boolean | undefined | null;
 
 type DeepReadonly<T> = T extends Primitive
@@ -24,7 +26,7 @@ type File = {
   path: string;
   name: string;
   parent: Folder;
-  imports: string[];
+  imports: ImportDefinition[];
 };
 
 type Demand = Folder | File;
