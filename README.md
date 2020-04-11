@@ -74,11 +74,12 @@ You can have a single config file at the root of your project or multiple config
   - .structlintrc
   - user-tests
   - settings-tests
-
 ```
  
 
 ## Usage
+
+Run from the root of your project:
 
 ```sh
 <path-to-node-modules>/.bin/structlint
@@ -89,6 +90,9 @@ OR
 ```
 npx structlint
 ```
+
+Structlint will recursively go through the sub-directories and lint them.
+If you prefer to lint just one sub-directory, you must change the directory before running the command: `cd tests && structlint`.
 
 ## Options
 
