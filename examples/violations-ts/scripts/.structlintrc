@@ -1,0 +1,9 @@
+{
+  "structure": [
+    {
+      "description": "scripts",
+      "path": "./",
+      "disallowedImports": ["../lib/**/*"]
+    },
+  ]
+}

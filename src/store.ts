@@ -4,6 +4,7 @@ import { DeepReadonly, Demand, File, Folder } from "./types";
 import { basename, dirname, join, resolve, sep } from "path";
 import { getImportType, IMPORT_TYPE, isFolder } from "./utils";
 import { FileNotFoundError, FolderNotFoundError } from "./errors";
+import { ImportDefinition } from "./parsers/types";
 
 const storeInternalRoot: Folder = {
   parent: undefined,
@@ -118,7 +119,7 @@ const setFile = (path: string, updateFile: (file: File) => Partial<File>) => {
 /**
  * Set imports for the given file under provided path.
  */
-const setFileImports = (path: string, relativeImports: string[]) => {
+const setFileImports = (path: string, relativeImports: ImportDefinition[]) => {
   setFile(path, currentFile => ({
     imports: relativeImports.map(importPath => {
       const importType = getImportType(importPath);

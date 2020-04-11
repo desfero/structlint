@@ -4,6 +4,8 @@ import { File, DeepReadonly } from "./types";
 import { ImportConfig } from "./config";
 import { debug } from "./utils";
 
+const traversalDebug = debug("traversal");
+
 type FileWithMatchedImports = {
   file: DeepReadonly<File>;
   matchedImports: string[];
@@ -30,15 +32,13 @@ const findMatchedImports = (
   file: DeepReadonly<File>,
   importConfig: ImportConfig,
 ) => {
-  debug(
-    "traversal",
+  traversalDebug(
     `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,
   );
 
   const matchedImports = micromatch(file.imports, importConfig.glob);
 
-  debug(
-    "traversal",
+  traversalDebug(
     `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
       "\n",
     )}`,

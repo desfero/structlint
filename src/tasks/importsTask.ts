@@ -10,12 +10,14 @@ import {
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
 
+const importTaskDebug = debug("imports-task");
+
 const runTask = async ({ relativePath, structure }: Config) => {
   const taskNested = await Promise.all(
     structure.map(async structure => {
       const path = join(relativePath, structure.path);
 
-      debug("imports-task", `Running task for ${path}`);
+      importTaskDebug(`Running task for ${path}`);
 
       // remap relative import paths from relative to absolute
       const disallowedImports = structure.disallowedImports.map(imp => {
@@ -31,8 +33,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
         return imp;
       });
 
-      debug(
-        "imports-task",
+      importTaskDebug(
         `Disallowed imports ${disallowedImports
           .map(imp => imp.glob)
           .join(", ")}`,
@@ -52,8 +53,7 @@ const runTask = async ({ relativePath, structure }: Config) => {
         return imp;
       });
 
-      debug(
-        "imports-task",
+      importTaskDebug(
         `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
       );
 
@@ -61,9 +61,9 @@ const runTask = async ({ relativePath, structure }: Config) => {
         expandDirectories: structure.recursive,
       });
 
-      debug("imports-task", `Files to parse ${files.join(", ")}`);
+      importTaskDebug(`Files to parse ${files.join(", ")}`);
 
-      debug("imports-task", `Directories to lint ${directories.join(", ")}`);
+      importTaskDebug(`Directories to lint ${directories.join(", ")}`);
 
       files.forEach(parse);
 
