@@ -30,8 +30,8 @@ then add the config into a `.structlintrc` file. For example:
       "path": "./modules",
       "disallowedImports": [
         {
-            glob: "./components/**/*",
-            message: "Business logic should never import UI components"
+            "glob": "./components/**/*",
+            "message": "Business logic should never import UI components"
         }
       ]
     },
@@ -42,6 +42,18 @@ then add the config into a `.structlintrc` file. For example:
       "allowedImports": ["./utils/**/*"],
     },
 }
+```
+
+## Usage
+
+```sh
+<path-to-node-modules>/.bin/structlint structlint
+```
+
+OR
+
+```
+npx structlint
 ```
 
 ## Options
