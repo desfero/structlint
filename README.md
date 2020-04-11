@@ -39,8 +39,9 @@ then add the config into a `.structlintrc` file. For example:
       "description": "Reducers",
       "path": "./reducers",
       "disallowedImports": ["./components/**/*", "./sagas/**/*"],
-      "allowedImports": ["./utils/**/*"],
-    },
+      "allowedImports": ["./utils/**/*"]
+    }
+  ]
 }
 ```
 
