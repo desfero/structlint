@@ -4,7 +4,9 @@
   <img src="https://raw.githubusercontent.com/desfero/structlint/master/logo/structlint_200x200.png" width="150" alt="structlint">
 </p>
 
-## Install
+## Getting Started
+
+Install the package:
 
 ```sh
 npm install --save-dev structlint
@@ -15,3 +17,46 @@ in case you prefer `yarn`
 ```sh
 yarn add -D structlint
 ```
+
+then add the config into a `.structlintrc` file. For example:
+
+**.structlintrc**
+
+```json
+{
+  "structure": [
+    {
+      "description": "Core application business logic",
+      "path": "./modules",
+      "disallowedImports": [
+        {
+            glob: "./components/**/*",
+            message: "Business logic should never import UI components"
+        }
+      ]
+    },
+    {
+      "description": "Reducers",
+      "path": "./reducers",
+      "disallowedImports": ["./components/**/*", "./sagas/**/*"],
+      "allowedImports": ["./utils/**/*"],
+    },
+}
+```
+
+## Options
+
+### structure
+Type: `array`
+
+An array of objects containing the following:
+
+| Name                | Type                               | Description                                                                                                          | 
+|---------------------|------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `description`       | `String`                           | Name or label or description for the directory to be linted                                                          | 
+| `path`              | `String`                           | Path to the directory to be linted relative to `.structlintrc`                                                       |
+| `disallowedImports` | `Array<String>` or `Array<Object>` | An array of globs representing the imports to be disallowed or an array of objects containing the glob and a message |
+| `allowedImports`    | `Array<String>` or `Array<Object>` | An array of globs representing the imports to be allowed  or an array of objects containing the glob and a message   |
+| `recursive`         | `Boolean`                          | Defaults to `true`. If `false`, will not check sub directories.                                                      |
+
+Checkout the [examples](https://github.com/desfero/structlint/tree/master/examples) for more.
