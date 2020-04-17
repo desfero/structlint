@@ -1,20 +1,20 @@
 import micromatch from "micromatch";
 
 import { File, DeepReadonly } from "./types";
-import { ImportConfig } from "./config";
 import { debug } from "./utils";
+import { TImportConfig } from "./config/types";
 
 const traversalDebug = debug("traversal");
 
 type FileWithMatchedImports = {
   file: DeepReadonly<File>;
   matchedImports: string[];
-  matchedConfig: ImportConfig;
+  matchedConfig: TImportConfig;
 };
 
 const findFilesWithImports = (
   files: DeepReadonly<File>[],
-  importConfigs: ImportConfig[],
+  importConfigs: TImportConfig[],
 ): FileWithMatchedImports[] =>
   files.flatMap(file =>
     importConfigs.flatMap(config => {
@@ -30,7 +30,7 @@ const findFilesWithImports = (
 
 const findMatchedImports = (
   file: DeepReadonly<File>,
-  importConfig: ImportConfig,
+  importConfig: TImportConfig,
 ) => {
   traversalDebug(
     `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,

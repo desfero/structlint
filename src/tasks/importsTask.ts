@@ -1,6 +1,5 @@
 import { join, sep } from "path";
 
-import { Config } from "../config";
 import {
   debug,
   getImportType,
@@ -9,72 +8,60 @@ import {
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
+import { TLoadConfigs, TImportConfig, TStructureConfig } from "../config/types";
 
 const importTaskDebug = debug("imports-task");
 
-const runTask = async ({ relativePath, structure }: Config) => {
-  const taskNested = await Promise.all(
-    structure.map(async structure => {
-      const path = join(relativePath, structure.path);
+const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
+  /**
+   * Remap relative import paths from relative to absolute
+   */
+  const remapImports = (imp: TImportConfig) => {
+    const importType = getImportType(imp.glob);
+    if (importType === IMPORT_TYPE.RELATIVE) {
+      return {
+        ...imp,
+        glob: join(sep, relativePath, imp.glob),
+      };
+    }
 
-      importTaskDebug(`Running task for ${path}`);
+    return imp;
+  };
 
-      // remap relative import paths from relative to absolute
-      const disallowedImports = structure.disallowedImports.map(imp => {
-        const importType = getImportType(imp.glob);
+  async function lint(structureItem: TStructureConfig) {
+    const path = join(relativePath, structureItem.path);
 
-        if (importType === IMPORT_TYPE.RELATIVE) {
-          return {
-            ...imp,
-            glob: join(sep, relativePath, imp.glob),
-          };
-        }
+    importTaskDebug(`Running task for ${path}`);
 
-        return imp;
-      });
+    const disallowedImports = structureItem.disallowedImports.map(remapImports);
 
-      importTaskDebug(
-        `Disallowed imports ${disallowedImports
-          .map(imp => imp.glob)
-          .join(", ")}`,
-      );
+    importTaskDebug(
+      `Disallowed imports ${disallowedImports.map(imp => imp.glob).join(", ")}`,
+    );
 
-      // remap relative import paths from relative to absolute
-      const allowedImports = structure.allowedImports.map(imp => {
-        const importType = getImportType(imp.glob);
+    const allowedImports = structureItem.allowedImports.map(remapImports);
 
-        if (importType === IMPORT_TYPE.RELATIVE) {
-          return {
-            ...imp,
-            glob: join(sep, relativePath, imp.glob),
-          };
-        }
+    importTaskDebug(
+      `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
+    );
 
-        return imp;
-      });
+    const { files, directories } = await getPathFilesAndDirectories(path, {
+      expandDirectories: structureItem.recursive,
+    });
 
-      importTaskDebug(
-        `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
-      );
+    importTaskDebug(`Files to parse ${files.join(", ")}`);
+    importTaskDebug(`Directories to lint ${directories.join(", ")}`);
 
-      const { files, directories } = await getPathFilesAndDirectories(path, {
-        expandDirectories: structure.recursive,
-      });
+    files.forEach(parse);
 
-      importTaskDebug(`Files to parse ${files.join(", ")}`);
+    return await analyze(
+      [path, ...directories],
+      disallowedImports,
+      allowedImports,
+    );
+  }
 
-      importTaskDebug(`Directories to lint ${directories.join(", ")}`);
-
-      files.forEach(parse);
-
-      return await analyze(
-        [path, ...directories],
-        disallowedImports,
-        allowedImports,
-      );
-    }),
-  );
-
+  const taskNested = await Promise.all(structure.map(lint));
   return taskNested.flat(Infinity);
 };
 
