@@ -12,6 +12,9 @@ import { TLoadConfigs, TImportConfig, TStructureConfig } from "../config/types";
 
 const importTaskDebug = debug("imports-task");
 
+const logDebugItems = (label: string, items: Array<string>) =>
+  importTaskDebug(`${label}: ${items.length > 0 ? items.join(", ") : "none"}`);
+
 const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
   /**
    * Remap relative import paths from relative to absolute
@@ -35,25 +38,27 @@ const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
 
     const disallowedImports = structureItem.disallowedImports.map(remapImports);
 
-    importTaskDebug(
-      `Disallowed imports ${disallowedImports.map(imp => imp.glob).join(", ")}`,
+    logDebugItems(
+      "Disallowed imports",
+      disallowedImports.map(imp => imp.glob),
     );
 
     const allowedImports = structureItem.allowedImports.map(remapImports);
 
-    importTaskDebug(
-      `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
+    logDebugItems(
+      "Allowed imports",
+      allowedImports.map(imp => imp.glob),
     );
 
     const { files, directories } = await getPathFilesAndDirectories(path, {
       expandDirectories: structureItem.recursive,
     });
 
-    importTaskDebug(`Files to parse ${files.join(", ")}`);
-    importTaskDebug(`Directories to lint ${directories.join(", ")}`);
+    logDebugItems("Files to parse", files);
+    logDebugItems("Directories to lint", directories);
 
     files.forEach(parse);
-
+    
     return await analyze(
       [path, ...directories],
       disallowedImports,
