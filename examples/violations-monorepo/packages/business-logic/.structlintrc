@@ -1,0 +1,20 @@
+{
+  "structure": [
+    {
+      "description": "Business Logic",
+      "path": "./",
+      "disallowedImports": [
+        {
+          "glob": "@monorepo/mobile-app",
+          "message": "Don't import mobile app into business-logic"
+        },{
+          "glob": "@monorepo/web-app",
+          "message": "Don't import web app into business-logic"
+        }, {
+          "glob": "@monorepo/components",
+          "message": "Don't import components into business-logic"
+        }
+      ]
+    }
+  ]
+}
