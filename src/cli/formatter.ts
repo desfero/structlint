@@ -1,16 +1,16 @@
 import chalk from "chalk";
 import dedent from "dedent";
 
-import { Violation, ViolationByType, ViolationType } from "../violations";
+import { TViolation, TViolationByType, EViolationType } from "../violations";
 import { NotYetImplementedError } from "../errors";
 
 const bold = chalk.bold;
 
-const printType = (type: ViolationType) => bold.red(type);
+const printType = (type: EViolationType) => bold.red(type);
 
-const printViolation = (violation: Violation) => {
+const printViolation = (violation: TViolation) => {
   switch (violation.type) {
-    case ViolationType.DISALLOWED_IMPORTS:
+    case EViolationType.DISALLOWED_IMPORTS:
       return logDisallowedImportViolation(violation);
 
     default:
@@ -22,7 +22,7 @@ const logDisallowedImportViolation = ({
   file,
   config,
   disallowedImports,
-}: ViolationByType<ViolationType.DISALLOWED_IMPORTS>) => {
+}: TViolationByType<EViolationType.DISALLOWED_IMPORTS>) => {
   return dedent`
         The following imports are disallowed in ${bold(file.path)}
         ${disallowedImports
@@ -32,7 +32,7 @@ const logDisallowedImportViolation = ({
     `;
 };
 
-const printResult = (violations: Violation[]) => {
+const printResult = (violations: TViolation[]) => {
   if (violations.length > 0) {
     return `Found ${bold.red(violations.length)} violation${
       violations.length !== 1 ? "s" : ""
@@ -42,7 +42,7 @@ const printResult = (violations: Violation[]) => {
   return chalk.green("No violations found");
 };
 
-const prettyPrintViolations = (violations: Violation[]) => {
+const prettyPrintViolations = (violations: TViolation[]) => {
   return (
     "\n" +
     violations

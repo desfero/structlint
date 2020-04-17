@@ -8,7 +8,7 @@ import isString from "lodash/fp/isString";
 import { getLanguageExtensions } from "./utils";
 import { FileParsingFailedError } from "../errors";
 import { setFileImports } from "../store";
-import { ImportDefinition, Parser } from "./types";
+import { TImportDefinition, TParser } from "./types";
 
 const babelPlugins: ParserPlugin[] = [
   "typescript",
@@ -46,7 +46,7 @@ const getImports = (fileName: string, fileContent: string) => {
     plugins: babelPlugins,
   });
 
-  const imports: ImportDefinition[] = [];
+  const imports: TImportDefinition[] = [];
 
   traverse(ast, {
     ImportDeclaration(path) {
@@ -65,7 +65,6 @@ const getImports = (fileName: string, fileContent: string) => {
         isString(parentCallExpression.node.arguments[0].value)
       ) {
         const importPath = parentCallExpression.node.arguments[0].value;
-
         imports.push(importPath);
       }
     },
@@ -82,7 +81,6 @@ const getImports = (fileName: string, fileContent: string) => {
           isString(init.node.arguments[0].value)
         ) {
           const importPath = init.node.arguments[0].value;
-
           imports.push(importPath);
         }
       }
@@ -95,9 +93,7 @@ const getImports = (fileName: string, fileContent: string) => {
 const parse = (filePath: string): void => {
   try {
     const fileBuffer = readFileSync(filePath);
-
     const fileContent = fileBuffer.toString();
-
     const relativeImports = getImports(filePath, fileContent);
 
     if (relativeImports.length) {
@@ -117,10 +113,9 @@ const extensions = getLanguageExtensions([
 
 const canParse = (filePath: string): boolean => {
   const ext = extname(filePath);
-
   return extensions.includes(ext);
 };
 
-const babelParser: Parser = { name: "babel", canParse, parse };
+const babelParser: TParser = { name: "babel", canParse, parse };
 
 export { babelParser };

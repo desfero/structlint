@@ -1,8 +1,8 @@
 import { babelParser } from "./parser-babel";
 import { MoreThanOneParserError } from "../errors";
-import { Parser } from "./types";
+import { TParser } from "./types";
 
-const parsers: readonly Parser[] = [babelParser];
+const parsers: readonly TParser[] = [babelParser];
 
 const parse = (filePath: string) => {
   const matchedParsers = parsers.filter(parser => parser.canParse(filePath));

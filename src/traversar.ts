@@ -1,21 +1,21 @@
 import micromatch from "micromatch";
 
-import { File, DeepReadonly } from "./types";
+import { TFile, TDeepReadonly } from "./types";
 import { debug } from "./utils";
 import { TImportConfig } from "./config/types";
 
 const traversalDebug = debug("traversal");
 
-type FileWithMatchedImports = {
-  file: DeepReadonly<File>;
+type TFileWithMatchedImports = {
+  file: TDeepReadonly<TFile>;
   matchedImports: string[];
   matchedConfig: TImportConfig;
 };
 
 const findFilesWithImports = (
-  files: DeepReadonly<File>[],
+  files: TDeepReadonly<TFile>[],
   importConfigs: TImportConfig[],
-): FileWithMatchedImports[] =>
+): TFileWithMatchedImports[] =>
   files.flatMap(file =>
     importConfigs.flatMap(config => {
       const matchedImports = findMatchedImports(file, config);
@@ -29,7 +29,7 @@ const findFilesWithImports = (
   );
 
 const findMatchedImports = (
-  file: DeepReadonly<File>,
+  file: TDeepReadonly<TFile>,
   importConfig: TImportConfig,
 ) => {
   traversalDebug(
@@ -47,4 +47,4 @@ const findMatchedImports = (
   return matchedImports;
 };
 
-export { findFilesWithImports, FileWithMatchedImports, findMatchedImports };
+export { findFilesWithImports, TFileWithMatchedImports, findMatchedImports };

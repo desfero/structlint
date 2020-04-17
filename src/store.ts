@@ -1,12 +1,12 @@
 import defaultTo from "lodash/fp/defaultTo";
 
-import { DeepReadonly, Demand, File, Folder } from "./types";
+import { TDeepReadonly, TDemand, TFile, TFolder } from "./types";
 import { basename, dirname, join, resolve, sep } from "path";
 import { getImportType, IMPORT_TYPE, isFolder } from "./utils";
 import { FileNotFoundError, FolderNotFoundError } from "./errors";
-import { ImportDefinition } from "./parsers/types";
+import { TImportDefinition } from "./parsers/types";
 
-const storeInternalRoot: Folder = {
+const storeInternalRoot: TFolder = {
   parent: undefined,
   path: "/",
   name: ".",
@@ -17,13 +17,13 @@ const storeInternalRoot: Folder = {
 const defaultToEmpty = defaultTo({});
 
 /**
- * For the given path returns either Folder or File
+ * For the given path returns either TFolder or TFile
  */
-const getDemand = (path: string): DeepReadonly<Demand> =>
+const getDemand = (path: string): TDeepReadonly<TDemand> =>
   getDemandInternal(path, storeInternalRoot);
 
 // TODO: Refactor to just throw in case folder do not exist and on top of that introduce `set` method
-const getDemandInternal = (path: string, currentFolder: Folder): Demand => {
+const getDemandInternal = (path: string, currentFolder: TFolder): TDemand => {
   const [current, ...rest] = path.split(sep);
 
   if (current === ".") {
@@ -56,7 +56,7 @@ const getDemandInternal = (path: string, currentFolder: Folder): Demand => {
  * Recursively gets the file for the given path.
  * Throws FileNotFoundError in case the file metadata not yet provided or the file doesn't exist
  */
-const getFile = (path: string): DeepReadonly<File> => {
+const getFile = (path: string): TDeepReadonly<TFile> => {
   const file = getFileInternal(path, storeInternalRoot);
 
   if (!file) {
@@ -71,7 +71,7 @@ const getFile = (path: string): DeepReadonly<File> => {
  * In case file is not yet fulfilled returns `undefined`
  * @internal Use in store.ts only
  */
-const getFileInternal = (path: string, root: Folder): File | undefined => {
+const getFileInternal = (path: string, root: TFolder): TFile | undefined => {
   const fileName = basename(path);
   const dirName = dirname(path);
 
@@ -84,7 +84,7 @@ const getFileInternal = (path: string, root: Folder): File | undefined => {
   return demand.files[fileName];
 };
 
-const getFileInitialFile = (name: string, parent: Folder) => ({
+const getFileInitialFile = (name: string, parent: TFolder) => ({
   name,
   parent,
   path: join(parent.path, name),
@@ -95,7 +95,7 @@ const getFileInitialFile = (name: string, parent: Folder) => ({
  * Updates the file current state.
  * Merges the `updatedFile` with the current file state
  */
-const setFile = (path: string, updateFile: (file: File) => Partial<File>) => {
+const setFile = (path: string, updateFile: (file: TFile) => Partial<TFile>) => {
   const fileName = basename(path);
   const dirName = dirname(path);
 
@@ -105,7 +105,7 @@ const setFile = (path: string, updateFile: (file: File) => Partial<File>) => {
     throw new FolderNotFoundError(path);
   }
 
-  const currentFile: File = {
+  const currentFile: TFile = {
     ...getFileInitialFile(fileName, demand),
     ...defaultToEmpty(demand.files[fileName]),
   };
@@ -119,7 +119,7 @@ const setFile = (path: string, updateFile: (file: File) => Partial<File>) => {
 /**
  * Set imports for the given file under provided path.
  */
-const setFileImports = (path: string, relativeImports: ImportDefinition[]) => {
+const setFileImports = (path: string, relativeImports: TImportDefinition[]) => {
   setFile(path, currentFile => ({
     imports: relativeImports.map(importPath => {
       const importType = getImportType(importPath);
