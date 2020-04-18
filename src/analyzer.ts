@@ -1,4 +1,4 @@
-import { findFilesWithImports } from "./traversar";
+import { findFilesWithImports } from "./traverser";
 import { createDisallowedImportViolation, TViolation } from "./violations";
 import { getDemand } from "./store";
 import { getFiles } from "./utils";

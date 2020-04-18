@@ -1,7 +1,7 @@
+import { basename, dirname, join, resolve, sep } from "path";
 import defaultTo from "lodash/fp/defaultTo";
 
 import { TDeepReadonly, TDemand, TFile, TFolder } from "./types";
-import { basename, dirname, join, resolve, sep } from "path";
 import { getImportType, IMPORT_TYPE, isFolder } from "./utils";
 import { FileNotFoundError, FolderNotFoundError } from "./errors";
 import { TImportDefinition } from "./parsers/types";
@@ -15,12 +15,6 @@ const storeInternalRoot: TFolder = {
 };
 
 const defaultToEmpty = defaultTo({});
-
-/**
- * For the given path returns either TFolder or TFile
- */
-const getDemand = (path: string): TDeepReadonly<TDemand> =>
-  getDemandInternal(path, storeInternalRoot);
 
 // TODO: Refactor to just throw in case folder do not exist and on top of that introduce `set` method
 const getDemandInternal = (path: string, currentFolder: TFolder): TDemand => {
@@ -53,18 +47,10 @@ const getDemandInternal = (path: string, currentFolder: TFolder): TDemand => {
 };
 
 /**
- * Recursively gets the file for the given path.
- * Throws FileNotFoundError in case the file metadata not yet provided or the file doesn't exist
+ * For the given path returns either TFolder or TFile
  */
-const getFile = (path: string): TDeepReadonly<TFile> => {
-  const file = getFileInternal(path, storeInternalRoot);
-
-  if (!file) {
-    throw new FileNotFoundError(path);
-  }
-
-  return file;
-};
+const getDemand = (path: string): TDeepReadonly<TDemand> =>
+  getDemandInternal(path, storeInternalRoot);
 
 /**
  * Recursively gets the file for the given path.
@@ -82,6 +68,19 @@ const getFileInternal = (path: string, root: TFolder): TFile | undefined => {
   }
 
   return demand.files[fileName];
+};
+/**
+ * Recursively gets the file for the given path.
+ * Throws FileNotFoundError in case the file metadata not yet provided or the file doesn't exist
+ */
+const getFile = (path: string): TDeepReadonly<TFile> => {
+  const file = getFileInternal(path, storeInternalRoot);
+
+  if (!file) {
+    throw new FileNotFoundError(path);
+  }
+
+  return file;
 };
 
 const getFileInitialFile = (name: string, parent: TFolder) => ({

@@ -5,6 +5,13 @@ enum EViolationType {
   DISALLOWED_IMPORTS = "DISALLOWED IMPORTS",
 }
 
+type TViolation = ReturnType<typeof createDisallowedImportViolation>;
+
+type TViolationByType<T extends EViolationType> = Extract<
+  TViolation,
+  { type: T }
+>;
+
 const createDisallowedImportViolation = (
   demand: TDeepReadonly<TDemand>,
   file: TDeepReadonly<TFile>,
@@ -18,10 +25,6 @@ const createDisallowedImportViolation = (
     demand,
     config,
   } as const);
-
-type TViolation = ReturnType<typeof createDisallowedImportViolation>;
-
-type TViolationByType<T extends EViolationType> = Extract<TViolation, { type: T }>;
 
 export {
   TViolation,

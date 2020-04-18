@@ -12,22 +12,6 @@ type TFileWithMatchedImports = {
   matchedConfig: TImportConfig;
 };
 
-const findFilesWithImports = (
-  files: TDeepReadonly<TFile>[],
-  importConfigs: TImportConfig[],
-): TFileWithMatchedImports[] =>
-  files.flatMap(file =>
-    importConfigs.flatMap(config => {
-      const matchedImports = findMatchedImports(file, config);
-
-      if (matchedImports.length > 0) {
-        return { file, matchedImports, matchedConfig: config };
-      }
-
-      return [];
-    }),
-  );
-
 const findMatchedImports = (
   file: TDeepReadonly<TFile>,
   importConfig: TImportConfig,
@@ -46,5 +30,21 @@ const findMatchedImports = (
 
   return matchedImports;
 };
+
+const findFilesWithImports = (
+  files: TDeepReadonly<TFile>[],
+  importConfigs: TImportConfig[],
+): TFileWithMatchedImports[] =>
+  files.flatMap(file =>
+    importConfigs.flatMap(config => {
+      const matchedImports = findMatchedImports(file, config);
+
+      if (matchedImports.length > 0) {
+        return { file, matchedImports, matchedConfig: config };
+      }
+
+      return [];
+    }),
+  );
 
 export { findFilesWithImports, TFileWithMatchedImports, findMatchedImports };
