@@ -17,7 +17,6 @@ const findMatchedImports = (
   imports: readonly string[],
   glob: string,
 ): TImportDefinition[] => {
-  console.log(imports);
   const matchedImports = micromatch(imports, glob);
   traversalDebug(
     `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
