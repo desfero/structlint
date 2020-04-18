@@ -13,6 +13,14 @@
         }, {
           "glob": "@monorepo/components",
           "message": "Don't import components into business-logic"
+        },
+        {
+          "glob": "../components/**/*",
+          "message": "Don't import components into business-logic"
+        },
+        {
+          "glob": "react",
+          "message": "Don't import React into business-logic"
         }
       ]
     }
