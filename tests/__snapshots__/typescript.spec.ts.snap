@@ -17,7 +17,7 @@ DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
 - react
 
 DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
-- /lib/fetch
+- /lib
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.ts
 - /components/TxSuccessModal
