@@ -41,13 +41,12 @@ const adjustGlobToParser = (filePath: string, glob: string) => {
 
   nonNullable(parser);
 
-  const scanInfo = micromatch.scan(glob)
-
   switch (parser.name) {
     case BABEL_PARSER:
-      // to support barrel imports remove `/*` from the glob if passed
-      if (scanInfo.glob.endsWith("/*")) {
-        return `${glob.slice(0, -2)}`;
+      // to support barrel imports replace add
+      // additional glob to match folder root
+      if (glob.endsWith("/*")) {
+        return [glob, `${glob.slice(0, -2)}`];
       }
 
       return glob;
@@ -66,10 +65,7 @@ const findMatchedImports = (
 
   const glob = adjustGlobToParser(file.path, importConfig.glob);
 
-  const matchedImports = micromatch(
-    file.imports,
-    glob,
-  );
+  const matchedImports = micromatch(file.imports, glob);
 
   traversalDebug(
     `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(

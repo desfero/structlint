@@ -3,7 +3,7 @@
 exports[`typescript support should return 2 violations 1`] = `
 "Resolving configs...
 Linting folder structure...
-Found 6 violations
+Found 8 violations
 
 DISALLOWED IMPORTS: The following imports are disallowed in /modules/utils.ts
 - react
@@ -13,6 +13,9 @@ DISALLOWED IMPORTS: The following imports are disallowed in /modules/transaction
 - /components/TxSuccessModal
 Business logic should never import UI components
 
+DISALLOWED IMPORTS: The following imports are disallowed in /components/TxModal.ts
+- /lib
+
 DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
 - react
 
@@ -21,6 +24,9 @@ DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.ts
 - /components/TxSuccessModal
+
+DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Link.ts
+- /components
 
 DISALLOWED IMPORTS: The following imports are disallowed in /scripts/generateReleaseNotes.ts
 - /lib/fetch
