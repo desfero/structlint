@@ -121,6 +121,8 @@ const canParse = (filePath: string): boolean => {
   return extensions.includes(ext);
 };
 
-const babelParser: Parser = { name: "babel", canParse, parse };
+const BABEL_PARSER = "babel";
 
-export { babelParser };
+const babelParser: Parser = { name: BABEL_PARSER, canParse, parse };
+
+export { babelParser, BABEL_PARSER };

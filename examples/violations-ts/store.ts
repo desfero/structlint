@@ -1,7 +1,7 @@
 import * as React from "react";
 
 const createStore = async () => {
-  const { fetch } = await import("./lib/fetch");
+  const { fetch } = await import("./lib");
 
   console.log("Creating redux store");
 
