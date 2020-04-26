@@ -38,6 +38,8 @@
     "linguist-languages": "^7.7.0",
     "lodash": "^4.17.15",
     "micromatch": "^4.0.2",
+    "tslib": "^1.10.0",
+    "ts-node": "^8.5.4",
     "yup": "^0.28.0"
   },
   "devDependencies": {
@@ -56,8 +58,6 @@
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "structlint": "^0.3.1",
-    "ts-node": "^8.5.4",
-    "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   },
   "engines": {
