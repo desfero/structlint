@@ -13,4 +13,4 @@ const Button = (props: TButtonExternalProps) => {
   return "button";
 };
 
-export { TxSuccessModal, Button };
+export { Button };

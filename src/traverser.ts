@@ -1,42 +1,25 @@
 import micromatch from "micromatch";
 
-import { TFile, TDeepReadonly } from "./types";
-import { debug } from "./utils";
-import { TImportConfig } from "./config/types";
-import { TImportDefinition } from "./parsers/types";
+import { File, DeepReadonly } from "./types";
+import { ImportConfig } from "./config";
+import { debug, nonNullable } from "./utils";
+import { BABEL_PARSER, getParser } from "./parsers";
 
 const traversalDebug = debug("traversal");
 
-type TFileWithMatchedImports = {
-  file: TDeepReadonly<TFile>;
+type FileWithMatchedImports = {
+  file: DeepReadonly<File>;
   matchedImports: string[];
-  matchedConfig: TImportConfig;
-};
-
-const findMatchedImports = (
-  imports: readonly string[],
-  glob: string,
-): TImportDefinition[] => {
-  const matchedImports = micromatch(imports, glob);
-  traversalDebug(
-    `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
-      "\n",
-    )}`,
-  );
-
-  return matchedImports;
+  matchedConfig: ImportConfig;
 };
 
 const findFilesWithImports = (
-  files: TDeepReadonly<TFile>[],
-  importConfigs: TImportConfig[],
-): TFileWithMatchedImports[] =>
+  files: DeepReadonly<File>[],
+  importConfigs: ImportConfig[],
+): FileWithMatchedImports[] =>
   files.flatMap(file =>
     importConfigs.flatMap(config => {
-      traversalDebug(
-        `Finding matched imports in ${file.path} for ${config.glob} glob`,
-      );
-      const matchedImports = findMatchedImports(file.imports, config.glob);
+      const matchedImports = findMatchedImports(file, config);
 
       if (matchedImports.length > 0) {
         return { file, matchedImports, matchedConfig: config };
@@ -46,4 +29,51 @@ const findFilesWithImports = (
     }),
   );
 
-export { findFilesWithImports, TFileWithMatchedImports, findMatchedImports };
+/**
+ * For some environments we need to adjust glob to catch more env specific imports
+ *
+ * For e.g. node env has a concept of barrel imports (index.js) that can be imported
+ * just with folder name.
+ *
+ */
+const adjustGlobToParser = (filePath: string, glob: string) => {
+  const parser = getParser(filePath);
+
+  nonNullable(parser);
+
+  switch (parser.name) {
+    case BABEL_PARSER:
+      // to support barrel imports replace add
+      // additional glob to match folder root
+      if (glob.endsWith("/*")) {
+        return [glob, `${glob.slice(0, -2)}`];
+      }
+
+      return glob;
+    default:
+      return glob;
+  }
+};
+
+const findMatchedImports = (
+  file: DeepReadonly<File>,
+  importConfig: ImportConfig,
+) => {
+  traversalDebug(
+    `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,
+  );
+
+  const glob = adjustGlobToParser(file.path, importConfig.glob);
+
+  const matchedImports = micromatch(file.imports, glob);
+
+  traversalDebug(
+    `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
+      "\n",
+    )}`,
+  );
+
+  return matchedImports;
+};
+
+export { findFilesWithImports, FileWithMatchedImports, findMatchedImports };
