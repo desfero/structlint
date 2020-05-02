@@ -2,7 +2,7 @@ import chalk from "chalk";
 import dedent from "dedent";
 import groupBy from "lodash/fp/groupBy";
 
-import { Violation, ViolationByType, ViolationType } from "../violations";
+import { TViolation, TViolationByType, EViolationType } from "../violations";
 import { debug } from "../utils";
 import { NotYetImplementedError } from "../errors";
 import { DeepReadonly, File } from "../types";
@@ -11,7 +11,7 @@ const bold = chalk.bold;
 
 const formatterDebug = debug("formatter");
 
-const printType = (type: ViolationType) => bold.red(type);
+const printType = (type: EViolationType) => bold.red(type);
 
 const printViolation = (file: DeepReadonly<File>, violations: Violation[]) => {
   switch (violations[0].type) {
@@ -25,7 +25,7 @@ const printViolation = (file: DeepReadonly<File>, violations: Violation[]) => {
 
 const logDisallowedImportViolation = (
   file: DeepReadonly<File>,
-  violations: ViolationByType<ViolationType.DISALLOWED_IMPORTS>[],
+  violations: TViolationByType<EViolationType.DISALLOWED_IMPORTS>[],
 ) => {
   return dedent`
         The following imports are disallowed in ${bold(file.path)}
@@ -42,7 +42,7 @@ const logDisallowedImportViolation = (
     `;
 };
 
-const printResult = (violations: Violation[]) => {
+const printResult = (violations: TViolation[]) => {
   if (violations.length > 0) {
     return `Found ${bold.red(violations.length)} violation${
       violations.length !== 1 ? "s" : ""
@@ -60,13 +60,12 @@ const groupViolations = groupBy<Violation>(
   violation => `${violation.type}|${violation.file.path}`,
 );
 
-const prettyPrintViolations = (violations: Violation[]) => {
+const prettyPrintViolations = (violations: TViolation[]) => {
   formatterDebug(`Grouping ${violations.length} violations by type and file`);
 
   const grouped = groupViolations(violations);
 
   formatterDebug(`Violations grouped. ${violations.length} violations to be reported`);
-
   return (
     "\n" +
     Object.values(grouped)

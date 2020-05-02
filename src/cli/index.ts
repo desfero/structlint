@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import { prettyPrintViolations, printResult } from "./formatter";
-import { loadConfigs } from "../config";
+import { loadConfigs } from "../config/loadConfigs";
 import { debug } from "../utils";
 import { importsTask } from "../tasks/importsTask";
 
@@ -20,7 +20,6 @@ const run = async () => {
     debug("cli", `Root: ${process.cwd()}`);
 
     log("Resolving configs...");
-
     const configs = loadConfigs();
 
     if (configs.length === 0) {
@@ -29,23 +28,18 @@ const run = async () => {
     }
 
     log("Linting folder structure...");
-
     const violationsNested = await Promise.all(
       configs.map(importsTask.runTask),
     );
-
     const violations = violationsNested.flat(Infinity);
-
     log(printResult(violations));
 
     if (violations.length > 0) {
       log(prettyPrintViolations(violations));
-
       terminate();
     }
   } catch (e) {
     error(e);
-
     terminate();
   }
 };

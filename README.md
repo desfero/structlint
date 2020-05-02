@@ -30,8 +30,8 @@ then add the config into a `.structlintrc` file. For example:
       "path": "./modules",
       "disallowedImports": [
         {
-            "glob": "./components/**/*",
-            "message": "Business logic should never import UI components"
+          "glob": "./components/**/*",
+          "message": "Business logic should never import UI components"
         }
       ]
     },
@@ -75,7 +75,6 @@ You can have a single config file at the root of your project or multiple config
   - user-tests
   - settings-tests
 ```
- 
 
 ## Usage
 
@@ -97,16 +96,17 @@ If you prefer to lint just one sub-directory, you must change the directory befo
 ## Options
 
 ### structure
+
 Type: `array`
 
 An array of objects containing the following:
 
-| Name                | Type                               | Description                                                                                                          | 
-|---------------------|------------------------------------|----------------------------------------------------------------------------------------------------------------------|
-| `description`       | `String`                           | Name or label or description for the directory to be linted                                                          | 
+| Name                | Type                               | Description                                                                                                          |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `description`       | `String`                           | Name or label or description for the directory to be linted                                                          |
 | `path`              | `String`                           | Path to the directory to be linted relative to `.structlintrc`                                                       |
 | `disallowedImports` | `Array<String>` or `Array<Object>` | An array of globs representing the imports to be disallowed or an array of objects containing the glob and a message |
-| `allowedImports`    | `Array<String>` or `Array<Object>` | An array of globs representing the imports to be allowed  or an array of objects containing the glob and a message   |
+| `allowedImports`    | `Array<String>` or `Array<Object>` | An array of globs representing the imports to be allowed or an array of objects containing the glob and a message    |
 | `recursive`         | `Boolean`                          | Defaults to `true`. If `false`, will not check sub directories.                                                      |
 
 Checkout the [examples](https://github.com/desfero/structlint/tree/master/examples) for more.

@@ -1,6 +1,5 @@
 import { join, sep } from "path";
 
-import { Config } from "../config";
 import {
   debug,
   getImportType,
@@ -9,72 +8,69 @@ import {
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
+import {
+  TLoadConfigs,
+  TImportConfig,
+  TStructureConfig,
+} from "../config/schemas";
 
 const importTaskDebug = debug("imports-task");
 
-const runTask = async ({ relativePath, structure }: Config) => {
-  const taskNested = await Promise.all(
-    structure.map(async structure => {
-      const path = join(relativePath, structure.path);
+const logDebugItems = (label: string, items: Array<string>) =>
+  importTaskDebug(`${label}: ${items.length > 0 ? items.join(", ") : "none"}`);
 
-      importTaskDebug(`Running task for ${path}`);
+const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
+  /**
+   * Remap relative import paths from relative to absolute
+   */
+  const remapImports = (imp: TImportConfig) => {
+    const importType = getImportType(imp.glob);
+    if (importType === IMPORT_TYPE.RELATIVE) {
+      return {
+        ...imp,
+        glob: join(sep, relativePath, imp.glob),
+      };
+    }
 
-      // remap relative import paths from relative to absolute
-      const disallowedImports = structure.disallowedImports.map(imp => {
-        const importType = getImportType(imp.glob);
+    return imp;
+  };
 
-        if (importType === IMPORT_TYPE.RELATIVE) {
-          return {
-            ...imp,
-            glob: join(sep, relativePath, imp.glob),
-          };
-        }
+  async function lint(structureItem: TStructureConfig) {
+    const path = join(relativePath, structureItem.path);
 
-        return imp;
-      });
+    importTaskDebug(`Running task for ${path}`);
 
-      importTaskDebug(
-        `Disallowed imports ${disallowedImports
-          .map(imp => imp.glob)
-          .join(", ")}`,
-      );
+    const disallowedImports = structureItem.disallowedImports.map(remapImports);
 
-      // remap relative import paths from relative to absolute
-      const allowedImports = structure.allowedImports.map(imp => {
-        const importType = getImportType(imp.glob);
+    logDebugItems(
+      "Disallowed imports",
+      disallowedImports.map(imp => imp.glob),
+    );
 
-        if (importType === IMPORT_TYPE.RELATIVE) {
-          return {
-            ...imp,
-            glob: join(sep, relativePath, imp.glob),
-          };
-        }
+    const allowedImports = structureItem.allowedImports.map(remapImports);
 
-        return imp;
-      });
+    logDebugItems(
+      "Allowed imports",
+      allowedImports.map(imp => imp.glob),
+    );
 
-      importTaskDebug(
-        `Allowed imports ${allowedImports.map(imp => imp.glob).join(", ")}`,
-      );
+    const { files, directories } = await getPathFilesAndDirectories(path, {
+      expandDirectories: structureItem.recursive,
+    });
 
-      const { files, directories } = await getPathFilesAndDirectories(path, {
-        expandDirectories: structure.recursive,
-      });
+    logDebugItems("Files to parse", files);
+    logDebugItems("Directories to lint", directories);
 
-      importTaskDebug(`Files to parse ${files.join(", ")}`);
+    files.forEach(parse);
 
-      importTaskDebug(`Directories to lint ${directories.join(", ")}`);
+    return await analyze(
+      [path, ...directories],
+      disallowedImports,
+      allowedImports,
+    );
+  }
 
-      files.forEach(parse);
-
-      return await analyze(
-        [path, ...directories],
-        disallowedImports,
-        allowedImports,
-      );
-    }),
-  );
-
+  const taskNested = await Promise.all(structure.map(lint));
   return taskNested.flat(Infinity);
 };
 

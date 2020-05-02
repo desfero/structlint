@@ -1,29 +1,32 @@
 import { DeepReadonly, File } from "./types";
 import { ImportConfig } from "./config";
 
-enum ViolationType {
+enum EViolationType {
   DISALLOWED_IMPORTS = "DISALLOWED IMPORTS",
 }
+
+type TViolation = ReturnType<typeof createDisallowedImportViolation>;
+
+type TViolationByType<T extends EViolationType> = Extract<
+  TViolation,
+  { type: T }
+>;
 
 const createDisallowedImportViolation = (
   file: DeepReadonly<File>,
   disallowedImports: string[],
-  config: ImportConfig,
+  config: TImportConfig,
 ) =>
   ({
-    type: ViolationType.DISALLOWED_IMPORTS,
+    type: EViolationType.DISALLOWED_IMPORTS,
     file,
     disallowedImports,
     config,
   } as const);
 
-type Violation = ReturnType<typeof createDisallowedImportViolation>;
-
-type ViolationByType<T extends ViolationType> = Extract<Violation, { type: T }>;
-
 export {
-  Violation,
+  TViolation,
   createDisallowedImportViolation,
-  ViolationType,
-  ViolationByType,
+  EViolationType,
+  TViolationByType,
 };

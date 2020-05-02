@@ -1,0 +1,12 @@
+{
+  "structure": [
+    {
+      "description": "Web App",
+      "path": "./",
+      "disallowedImports": [{
+        "glob": "@monorepo/web-app",
+        "message": "Don't import mobile app into web app package"
+      }]
+    }
+  ]
+}
