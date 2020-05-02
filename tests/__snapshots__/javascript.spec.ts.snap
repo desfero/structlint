@@ -22,6 +22,29 @@ DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/B
 "
 `;
 
+exports[`javascript support should return 4 violations for mono repo 1`] = `
+"Resolving configs...
+Linting folder structure...
+Found 4 violations
+
+DISALLOWED IMPORTS: The following imports are disallowed in /packages/web-app/App.js
+- react-native
+Don't import React native into web app package
+
+DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
+- @monorepo/components
+Don't import components into business-logic
+
+DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
+- /packages/components/TextField
+Don't import components into business-logic
+
+DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
+- react
+Don't import React into business-logic
+"
+`;
+
 exports[`javascript support should return no config found 1`] = `
 "Resolving configs...
 You need to specify structure config to run linter.
