@@ -1,5 +1,5 @@
 import { TDeepReadonly, TDemand, TFile } from "./types";
-import { TImportConfig } from "./config/types";
+import { TImportConfig } from "./config/schemas";
 
 enum EViolationType {
   DISALLOWED_IMPORTS = "DISALLOWED IMPORTS",

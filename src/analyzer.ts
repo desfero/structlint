@@ -2,7 +2,7 @@ import { findFilesWithImports } from "./traverser";
 import { createDisallowedImportViolation, TViolation } from "./violations";
 import { getDemand } from "./store";
 import { getFiles } from "./utils";
-import { TImportConfig } from "./config/types";
+import { TImportConfig } from "./config/schemas";
 
 export const analyze = async (
   paths: string[],

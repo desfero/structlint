@@ -3,7 +3,7 @@ import * as globby from "globby";
 import { dirname, relative } from "path";
 
 import { name } from "../../package.json";
-import { TLoadConfigs, configSchema } from "./types";
+import { TLoadConfigs, configSchema } from "./schemas";
 
 const CONFIG_PATTERNS = ["**/.structlintrc"];
 

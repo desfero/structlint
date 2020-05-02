@@ -8,7 +8,7 @@ import {
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
-import { TLoadConfigs, TImportConfig, TStructureConfig } from "../config/types";
+import { TLoadConfigs, TImportConfig, TStructureConfig } from "../config/schemas";
 
 const importTaskDebug = debug("imports-task");
 
