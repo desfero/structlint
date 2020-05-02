@@ -1,0 +1,12 @@
+{
+  "structure": [
+    {
+      "description": "Web App",
+      "path": "./packages/web-app",
+      "disallowedImports": [{
+        "glob": "react-native",
+        "message": "Don't import React native into web app package"
+      }]
+    }
+  ]
+}

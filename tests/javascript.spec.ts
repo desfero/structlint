@@ -29,4 +29,13 @@ describe("javascript support", () => {
     expect(code).toBe(1);
     expect(stdout).toMatchSnapshot();
   });
+
+  it("should return 4 violations for mono repo", async () => {
+    const { stdout, code } = await structLint({
+      cwd: resolve(__dirname, "../examples/violations-monorepo"),
+    });
+
+    expect(code).toBe(1);
+    expect(stdout).toMatchSnapshot();
+  });
 });

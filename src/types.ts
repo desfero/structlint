@@ -1,34 +1,41 @@
-import { ImportDefinition } from "./parsers/types";
+import { TImportDefinition } from "./parsers/types";
 
-type Primitive = string | number | boolean | undefined | null;
+type TPrimitive = string | number | boolean | undefined | null;
 
-type DeepReadonly<T> = T extends Primitive
+type TDeepReadonly<T> = T extends TPrimitive
   ? T
   : T extends Array<infer U>
   ? ReadonlyArray<U>
   : T extends Function
   ? T
-  : DeepReadonlyObject<T>;
+  : TDeepReadonlyObject<T>;
 
-type DeepReadonlyObject<T> = {
-  readonly [P in keyof T]: DeepReadonly<T[P]>;
+type TDeepReadonlyObject<T> = {
+  readonly [P in keyof T]: TDeepReadonly<T[P]>;
 };
 
-type Folder = {
-  parent: undefined | Folder;
+type TFolder = {
+  parent: undefined | TFolder;
   path: string;
   name: string;
-  folders: Record<string, undefined | Folder>;
-  files: Record<string, undefined | File>;
+  folders: Record<string, undefined | TFolder>;
+  files: Record<string, undefined | TFile>;
 };
 
-type File = {
+type TFile = {
   path: string;
   name: string;
-  parent: Folder;
-  imports: ImportDefinition[];
+  parent: TFolder;
+  imports: TImportDefinition[];
 };
 
-type Demand = Folder | File;
+type TDemand = TFolder | TFile;
 
-export { File, Folder, Primitive, DeepReadonly, DeepReadonlyObject, Demand };
+export {
+  TFile,
+  TFolder,
+  TPrimitive,
+  TDeepReadonly,
+  TDeepReadonlyObject,
+  TDemand,
+};

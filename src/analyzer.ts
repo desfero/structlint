@@ -1,14 +1,14 @@
-import { findFilesWithImports } from "./traversar";
-import { createDisallowedImportViolation, Violation } from "./violations";
+import { findFilesWithImports } from "./traverser";
+import { createDisallowedImportViolation, TViolation } from "./violations";
 import { getDemand } from "./store";
-import { ImportConfig } from "./config";
 import { getFiles } from "./utils";
+import { TImportConfig } from "./config/schemas";
 
 export const analyze = async (
   paths: string[],
-  disallowedImports: ImportConfig[],
-  allowedImports: ImportConfig[],
-): Promise<Violation[]> =>
+  disallowedImports: TImportConfig[],
+  allowedImports: TImportConfig[],
+): Promise<TViolation[]> =>
   paths.flatMap(path => {
     const demand = getDemand(path);
     const files = getFiles(demand);

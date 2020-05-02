@@ -5,7 +5,7 @@ import globby from "globby";
 import compact from "lodash/fp/compact";
 import curry from "lodash/fp/curry";
 
-import { DeepReadonly, Folder, Demand } from "./types";
+import { TDeepReadonly, TFolder, TDemand } from "./types";
 import { StructlintError } from "./errors";
 
 const structLintDebug = debugP("struct-lint");
@@ -50,14 +50,14 @@ const getPathFilesAndDirectories = async (
  * Check if a given demand is a folder
  */
 const isFolder = (
-  demand: DeepReadonly<Demand>,
-): demand is DeepReadonly<Folder> => "folders" in demand;
+  demand: TDeepReadonly<TDemand>,
+): demand is TDeepReadonly<TFolder> => "folders" in demand;
 
 /**
  * Get all files of a given demand.
  * If demand is a file itself wraps the file into array
  */
-const getFiles = (demand: DeepReadonly<Demand>) => {
+const getFiles = (demand: TDeepReadonly<TDemand>) => {
   if (!isFolder(demand)) {
     return [demand];
   }

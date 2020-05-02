@@ -23,7 +23,7 @@
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "jest",
-    "lint": "cd ./src && structlint",
+    "lint": "yarn format && cd ./src && structlint",
     "format": "prettier --check '**/*.{ts,tsx,js,json,md,gql}'",
     "format:fix": "prettier --write '**/*.{ts,tsx,js,json,md,gql}'"
   },
