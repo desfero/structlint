@@ -5,7 +5,7 @@ import groupBy from "lodash/fp/groupBy";
 import { TViolation, TViolationByType, EViolationType } from "../violations";
 import { debug } from "../utils";
 import { NotYetImplementedError } from "../errors";
-import { DeepReadonly, File } from "../types";
+import { TDeepReadonly, TFile } from "../types";
 
 const bold = chalk.bold;
 
@@ -13,9 +13,12 @@ const formatterDebug = debug("formatter");
 
 const printType = (type: EViolationType) => bold.red(type);
 
-const printViolation = (file: DeepReadonly<File>, violations: Violation[]) => {
+const printViolation = (
+  file: TDeepReadonly<TFile>,
+  violations: TViolation[],
+) => {
   switch (violations[0].type) {
-    case ViolationType.DISALLOWED_IMPORTS:
+    case EViolationType.DISALLOWED_IMPORTS:
       return logDisallowedImportViolation(file, violations);
 
     default:
@@ -24,7 +27,7 @@ const printViolation = (file: DeepReadonly<File>, violations: Violation[]) => {
 };
 
 const logDisallowedImportViolation = (
-  file: DeepReadonly<File>,
+  file: TDeepReadonly<TFile>,
   violations: TViolationByType<EViolationType.DISALLOWED_IMPORTS>[],
 ) => {
   return dedent`
@@ -56,7 +59,7 @@ const printResult = (violations: TViolation[]) => {
  * Given that violations may come from different tasks for the same file
  * manual grouping is required to show all file related violations at once
  */
-const groupViolations = groupBy<Violation>(
+const groupViolations = groupBy<TViolation>(
   violation => `${violation.type}|${violation.file.path}`,
 );
 
@@ -65,7 +68,9 @@ const prettyPrintViolations = (violations: TViolation[]) => {
 
   const grouped = groupViolations(violations);
 
-  formatterDebug(`Violations grouped. ${violations.length} violations to be reported`);
+  formatterDebug(
+    `Violations grouped. ${violations.length} violations to be reported`,
+  );
   return (
     "\n" +
     Object.values(grouped)

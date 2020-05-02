@@ -1,5 +1,5 @@
-import { DeepReadonly, File } from "./types";
-import { ImportConfig } from "./config";
+import { TDeepReadonly, TFile } from "./types";
+import { TImportConfig } from "./config/schemas";
 
 enum EViolationType {
   DISALLOWED_IMPORTS = "DISALLOWED IMPORTS",
@@ -13,7 +13,7 @@ type TViolationByType<T extends EViolationType> = Extract<
 >;
 
 const createDisallowedImportViolation = (
-  file: DeepReadonly<File>,
+  file: TDeepReadonly<TFile>,
   disallowedImports: string[],
   config: TImportConfig,
 ) =>
