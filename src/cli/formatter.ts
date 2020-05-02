@@ -3,10 +3,13 @@ import dedent from "dedent";
 import groupBy from "lodash/fp/groupBy";
 
 import { Violation, ViolationByType, ViolationType } from "../violations";
+import { debug } from "../utils";
 import { NotYetImplementedError } from "../errors";
 import { DeepReadonly, File } from "../types";
 
 const bold = chalk.bold;
+
+const formatterDebug = debug("formatter");
 
 const printType = (type: ViolationType) => bold.red(type);
 
@@ -29,11 +32,9 @@ const logDisallowedImportViolation = (
         ${violations
           .map(
             ({ disallowedImports, config }) => dedent`
-              ${
-                disallowedImports
-                  .map(importPath => `- ${bold(importPath)}`)
-                  .join("\n")
-              }
+              ${disallowedImports
+                .map(importPath => `- ${bold(importPath)}`)
+                .join("\n")}
               ${config.message || ""} 
             `,
           )
@@ -60,7 +61,11 @@ const groupViolations = groupBy<Violation>(
 );
 
 const prettyPrintViolations = (violations: Violation[]) => {
+  formatterDebug(`Grouping ${violations.length} violations by type and file`);
+
   const grouped = groupViolations(violations);
+
+  formatterDebug(`Violations grouped. ${violations.length} violations to be reported`);
 
   return (
     "\n" +
@@ -70,10 +75,7 @@ const prettyPrintViolations = (violations: Violation[]) => {
         // therefore we can just take them from the first violation
         const { type, file } = violations[0];
 
-        return dedent`${printType(type)}: ${printViolation(
-          file,
-          violations,
-        )}`;
+        return dedent`${printType(type)}: ${printViolation(file, violations)}`;
       })
       .join("\n\n")
   );
