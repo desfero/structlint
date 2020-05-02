@@ -71,7 +71,7 @@ const getFileInternal = (path: string, root: TFolder): TFile | undefined => {
 };
 /**
  * Recursively gets the file for the given path.
- * Throws FileNotFoundError in case the file metadata not yet provided or the file doesn't exist
+ * @throws {FileNotFoundError} in case the file metadata not yet provided or the file doesn't exist
  */
 const getFile = (path: string): TDeepReadonly<TFile> => {
   const file = getFileInternal(path, storeInternalRoot);
@@ -93,6 +93,7 @@ const getFileInitialFile = (name: string, parent: TFolder) => ({
 /**
  * Updates the file current state.
  * Merges the `updatedFile` with the current file state
+ * @throws {FileNotFoundError}
  */
 const setFile = (path: string, updateFile: (file: TFile) => Partial<TFile>) => {
   const fileName = basename(path);
