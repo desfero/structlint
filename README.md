@@ -1,7 +1,7 @@
 ![npm](https://img.shields.io/npm/v/structlint?style=flat-square)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/desfero/structlint/master/logo/logo_transparent.png" width="150" alt="structlint">
+  <img src="https://raw.githubusercontent.com/desfero/structlint/master/logo/logo_transparent.png" width="300" alt="structlint">
 </p>
 
 ## Getting Started
