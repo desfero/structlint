@@ -31,4 +31,11 @@ type TFile = {
 
 type TDemand = TFolder | TFile;
 
-export { TFile, TFolder, TPrimitive, TDeepReadonly, TDeepReadonlyObject, TDemand };
+export {
+  TFile,
+  TFolder,
+  TPrimitive,
+  TDeepReadonly,
+  TDeepReadonlyObject,
+  TDemand,
+};

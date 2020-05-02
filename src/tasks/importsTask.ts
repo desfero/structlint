@@ -8,7 +8,11 @@ import {
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
-import { TLoadConfigs, TImportConfig, TStructureConfig } from "../config/schemas";
+import {
+  TLoadConfigs,
+  TImportConfig,
+  TStructureConfig,
+} from "../config/schemas";
 
 const importTaskDebug = debug("imports-task");
 
@@ -58,7 +62,7 @@ const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
     logDebugItems("Directories to lint", directories);
 
     files.forEach(parse);
-    
+
     return await analyze(
       [path, ...directories],
       disallowedImports,
