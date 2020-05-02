@@ -18,9 +18,8 @@ DISALLOWED IMPORTS: The following imports are disallowed in /components/TxModal.
 
 DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
 - react
-
-DISALLOWED IMPORTS: The following imports are disallowed in /store.ts
 - /lib
+Lib's should not be imported in store configuration
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.ts
 - /components/TxSuccessModal
