@@ -13,22 +13,6 @@ type FileWithMatchedImports = {
   matchedConfig: ImportConfig;
 };
 
-const findFilesWithImports = (
-  files: DeepReadonly<File>[],
-  importConfigs: ImportConfig[],
-): FileWithMatchedImports[] =>
-  files.flatMap(file =>
-    importConfigs.flatMap(config => {
-      const matchedImports = findMatchedImports(file, config);
-
-      if (matchedImports.length > 0) {
-        return { file, matchedImports, matchedConfig: config };
-      }
-
-      return [];
-    }),
-  );
-
 /**
  * For some environments we need to adjust glob to catch more env specific imports
  *
@@ -55,7 +39,7 @@ const adjustGlobToParser = (filePath: string, glob: string) => {
   }
 };
 
-const findMatchedImports = (
+export const findMatchedImports = (
   file: DeepReadonly<File>,
   importConfig: ImportConfig,
 ) => {
@@ -75,5 +59,21 @@ const findMatchedImports = (
 
   return matchedImports;
 };
+
+const findFilesWithImports = (
+  files: DeepReadonly<File>[],
+  importConfigs: ImportConfig[],
+): FileWithMatchedImports[] =>
+  files.flatMap(file =>
+    importConfigs.flatMap(config => {
+      const matchedImports = findMatchedImports(file, config);
+
+      if (matchedImports.length > 0) {
+        return { file, matchedImports, matchedConfig: config };
+      }
+
+      return [];
+    }),
+  );
 
 export { findFilesWithImports, FileWithMatchedImports, findMatchedImports };
