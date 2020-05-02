@@ -33,7 +33,6 @@ export const analyze = async (
       .concat(filesWithDisallowedMatchedImports)
       .map(match =>
         createDisallowedImportViolation(
-          demand,
           match.file,
           match.matchedImports,
           match.matchedConfig,

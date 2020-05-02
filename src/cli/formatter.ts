@@ -1,34 +1,43 @@
 import chalk from "chalk";
 import dedent from "dedent";
+import groupBy from "lodash/fp/groupBy";
 
 import { Violation, ViolationByType, ViolationType } from "../violations";
 import { NotYetImplementedError } from "../errors";
+import { DeepReadonly, File } from "../types";
 
 const bold = chalk.bold;
 
 const printType = (type: ViolationType) => bold.red(type);
 
-const printViolation = (violation: Violation) => {
-  switch (violation.type) {
+const printViolation = (file: DeepReadonly<File>, violations: Violation[]) => {
+  switch (violations[0].type) {
     case ViolationType.DISALLOWED_IMPORTS:
-      return logDisallowedImportViolation(violation);
+      return logDisallowedImportViolation(file, violations);
 
     default:
       throw new NotYetImplementedError();
   }
 };
 
-const logDisallowedImportViolation = ({
-  file,
-  config,
-  disallowedImports,
-}: ViolationByType<ViolationType.DISALLOWED_IMPORTS>) => {
+const logDisallowedImportViolation = (
+  file: DeepReadonly<File>,
+  violations: ViolationByType<ViolationType.DISALLOWED_IMPORTS>[],
+) => {
   return dedent`
         The following imports are disallowed in ${bold(file.path)}
-        ${disallowedImports
-          .map(importPath => `- ${bold(importPath)}`)
+        ${violations
+          .map(
+            ({ disallowedImports, config }) => dedent`
+              ${
+                disallowedImports
+                  .map(importPath => `- ${bold(importPath)}`)
+                  .join("\n")
+              }
+              ${config.message || ""} 
+            `,
+          )
           .join("\n")}
-        ${config.message || ""}  
     `;
 };
 
@@ -42,14 +51,30 @@ const printResult = (violations: Violation[]) => {
   return chalk.green("No violations found");
 };
 
+/**
+ * Given that violations may come from different tasks for the same file
+ * manual grouping is required to show all file related violations at once
+ */
+const groupViolations = groupBy<Violation>(
+  violation => `${violation.type}|${violation.file.path}`,
+);
+
 const prettyPrintViolations = (violations: Violation[]) => {
+  const grouped = groupViolations(violations);
+
   return (
     "\n" +
-    violations
-      .map(
-        violation =>
-          dedent`${printType(violation.type)}: ${printViolation(violation)}`,
-      )
+    Object.values(grouped)
+      .map(violations => {
+        // `fileViolations` are grouped already by type and file
+        // therefore we can just take them from the first violation
+        const { type, file } = violations[0];
+
+        return dedent`${printType(type)}: ${printViolation(
+          file,
+          violations,
+        )}`;
+      })
       .join("\n\n")
   );
 };

@@ -19,7 +19,13 @@
     {
       "description": "Store creation logic",
       "path": "./store.ts",
-      "disallowedImports": ["react", "./lib/**/*"]
+      "disallowedImports": [
+        "react",
+        {
+          glob: "./lib/**/*",
+          message: "Lib's should not be imported in store configuration"
+        }
+      ]
     }
   ]
 }

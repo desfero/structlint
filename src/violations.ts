@@ -1,4 +1,4 @@
-import { DeepReadonly, Demand, File } from "./types";
+import { DeepReadonly, File } from "./types";
 import { ImportConfig } from "./config";
 
 enum ViolationType {
@@ -6,7 +6,6 @@ enum ViolationType {
 }
 
 const createDisallowedImportViolation = (
-  demand: DeepReadonly<Demand>,
   file: DeepReadonly<File>,
   disallowedImports: string[],
   config: ImportConfig,
@@ -15,7 +14,6 @@ const createDisallowedImportViolation = (
     type: ViolationType.DISALLOWED_IMPORTS,
     file,
     disallowedImports,
-    demand,
     config,
   } as const);
 
