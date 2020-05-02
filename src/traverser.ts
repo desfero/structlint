@@ -1,16 +1,16 @@
 import micromatch from "micromatch";
 
-import { File, DeepReadonly } from "./types";
-import { ImportConfig } from "./config";
+import { TFile, TDeepReadonly } from "./types";
+import { TImportConfig } from "./config/schemas";
 import { debug, nonNullable } from "./utils";
 import { BABEL_PARSER, getParser } from "./parsers";
 
 const traversalDebug = debug("traversal");
 
 type FileWithMatchedImports = {
-  file: DeepReadonly<File>;
+  file: TDeepReadonly<TFile>;
   matchedImports: string[];
-  matchedConfig: ImportConfig;
+  matchedConfig: TImportConfig;
 };
 
 /**
@@ -39,9 +39,9 @@ const adjustGlobToParser = (filePath: string, glob: string) => {
   }
 };
 
-export const findMatchedImports = (
-  file: DeepReadonly<File>,
-  importConfig: ImportConfig,
+const findMatchedImports = (
+  file: TDeepReadonly<TFile>,
+  importConfig: TImportConfig,
 ) => {
   traversalDebug(
     `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,
@@ -61,8 +61,8 @@ export const findMatchedImports = (
 };
 
 const findFilesWithImports = (
-  files: DeepReadonly<File>[],
-  importConfigs: ImportConfig[],
+  files: TDeepReadonly<TFile>[],
+  importConfigs: TImportConfig[],
 ): FileWithMatchedImports[] =>
   files.flatMap(file =>
     importConfigs.flatMap(config => {

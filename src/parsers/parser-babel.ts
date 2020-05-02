@@ -8,7 +8,7 @@ import isString from "lodash/fp/isString";
 import { getLanguageExtensions } from "./utils";
 import { FileParsingFailedError } from "../errors";
 import { setFileImports } from "../store";
-import { TImportDefinition } from "./types";
+import { TImportDefinition, TParser } from "./types";
 
 const babelPlugins: ParserPlugin[] = [
   "typescript",
@@ -118,6 +118,6 @@ const canParse = (filePath: string): boolean => {
 
 const BABEL_PARSER = "babel";
 
-const babelParser: Parser = { name: BABEL_PARSER, canParse, parse };
+const babelParser: TParser = { name: BABEL_PARSER, canParse, parse };
 
 export { babelParser, BABEL_PARSER };

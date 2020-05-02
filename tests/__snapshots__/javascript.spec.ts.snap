@@ -13,8 +13,6 @@ Business logic should never import UI components
 DISALLOWED IMPORTS: The following imports are disallowed in /libs/HttpService.js
 - lodash
 - /modules/utils
-
-DISALLOWED IMPORTS: The following imports are disallowed in /libs/HttpService.js
 - /config/internal
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.jsx
@@ -34,12 +32,8 @@ Don't import React native into web app package
 DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
 - @monorepo/components
 Don't import components into business-logic
-
-DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
 - /packages/components/TextField
 Don't import components into business-logic
-
-DISALLOWED IMPORTS: The following imports are disallowed in /packages/business-logic/user-logic.js
 - react
 Don't import React into business-logic
 "
