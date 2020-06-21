@@ -13,15 +13,10 @@ export const analyze = async (
     const demand = getDemand(path);
     const files = getFiles(demand);
 
-    // negate allowed imports glob to catch all disallowed imports
-    const allowedImportsNegated = allowedImports.map(imp => ({
-      ...imp,
-      glob: `!${imp.glob}`,
-    }));
-
-    const filesWithAllowedNegatedMatchedImports = findFilesWithImports(
+    const filesWithAllowedMatchedImports = findFilesWithImports(
       files,
-      allowedImportsNegated,
+      allowedImports,
+      true,
     );
 
     const filesWithDisallowedMatchedImports = findFilesWithImports(
@@ -29,12 +24,12 @@ export const analyze = async (
       disallowedImports,
     );
 
-    return filesWithAllowedNegatedMatchedImports
+    return filesWithAllowedMatchedImports
       .concat(filesWithDisallowedMatchedImports)
       .map(match =>
         createDisallowedImportViolation(
           match.file,
-          match.matchedImports,
+          match.matchedImport,
           match.matchedConfig,
         ),
       );

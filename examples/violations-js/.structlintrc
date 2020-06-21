@@ -20,6 +20,11 @@
       "path": "./libs",
       "disallowedImports": ["./config/**/internal"],
       "allowedImports": ["./config/**/*"]
+    },
+    {
+      "description": "E2E tests",
+      "path": "./e2e",
+      "allowedImports": ["./config/**/*", "./e2e/*"]
     }
   ]
 }

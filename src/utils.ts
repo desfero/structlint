@@ -7,6 +7,7 @@ import curry from "lodash/fp/curry";
 
 import { TDeepReadonly, TFolder, TDemand } from "./types";
 import { StructlintError } from "./errors";
+import micromatch from "micromatch";
 
 const structLintDebug = debugP("struct-lint");
 
@@ -87,6 +88,43 @@ const debug = curry((module: string, message: string) =>
   structLintDebug.extend(module)(message),
 );
 
+/**
+ * A small wrapper around `micromatch` to negate matches.
+ * Based on `micromatch.not` with a slightly difference in behaviour.
+ */
+const micromatchNot = (
+  list: ReadonlyArray<string>,
+  patterns: ReadonlyArray<string>,
+  { onMatch, onResult, ...rest }: micromatch.Options = {},
+) => {
+  const result = new Set();
+
+  const items: micromatch.Item[] = [];
+
+  const onResultHandler = (item: micromatch.Item) => {
+    if (onResult) {
+      onResult(item);
+    }
+
+    items.push(item);
+  };
+
+  const matches = micromatch(list, patterns, {
+    ...rest,
+    onResult: onResultHandler,
+  });
+
+  for (const item of items) {
+    if (!matches.includes(item.output) && !result.has(item.output)) {
+      if (onMatch) {
+        onMatch(item);
+      }
+      result.add(item.output);
+    }
+  }
+  return Array.from(result);
+};
+
 export {
   nonNullable,
   getPathFilesAndDirectories,
@@ -95,4 +133,5 @@ export {
   debug,
   isFolder,
   getFiles,
+  micromatchNot,
 };
