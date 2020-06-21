@@ -3,10 +3,11 @@
 exports[`javascript support should return 2 structure violations 1`] = `
 "Resolving configs...
 Linting folder structure...
-Found 4 violations
+Found 8 violations
 
 DISALLOWED IMPORTS: The following imports are disallowed in /modules/transactions/sagas.js
 - /components/TxModal
+Business logic should never import UI components
 - /components/TxSuccessModal
 Business logic should never import UI components
 
@@ -14,6 +15,10 @@ DISALLOWED IMPORTS: The following imports are disallowed in /libs/HttpService.js
 - lodash
 - /modules/utils
 - /config/internal
+
+DISALLOWED IMPORTS: The following imports are disallowed in /e2e/investor-flow/invest.spec.e2e.js
+- /libs/HttpService
+- /e2e/investor-flow/payout.spec.e2e
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.jsx
 - /components/TxSuccessModal

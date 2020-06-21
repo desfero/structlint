@@ -14,6 +14,8 @@ type TDeepReadonlyObject<T> = {
   readonly [P in keyof T]: TDeepReadonly<T[P]>;
 };
 
+export type SafeRecord<K extends string | number, T> = { [key in K]?: T };
+
 type TFolder = {
   parent: undefined | TFolder;
   path: string;

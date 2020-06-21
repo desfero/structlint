@@ -2,14 +2,16 @@ import micromatch from "micromatch";
 
 import { TFile, TDeepReadonly } from "./types";
 import { TImportConfig } from "./config/schemas";
-import { debug, nonNullable } from "./utils";
+import { debug, micromatchNot, nonNullable } from "./utils";
 import { BABEL_PARSER, getParser } from "./parsers";
 
 const traversalDebug = debug("traversal");
 
+type Match = { config: TImportConfig; import: string };
+
 type FileWithMatchedImports = {
   file: TDeepReadonly<TFile>;
-  matchedImports: string[];
+  matchedImport: string;
   matchedConfig: TImportConfig;
 };
 
@@ -33,47 +35,80 @@ const adjustGlobToParser = (filePath: string, glob: string) => {
         return [glob, `${glob.slice(0, -2)}`];
       }
 
-      return glob;
+      return [glob];
     default:
-      return glob;
+      return [glob];
   }
 };
 
 const findMatchedImports = (
   file: TDeepReadonly<TFile>,
-  importConfig: TImportConfig,
+  importConfig: TImportConfig[],
+  negate: boolean,
 ) => {
   traversalDebug(
-    `Finding matched imports in ${file.path} for ${importConfig.glob} glob`,
+    `Finding matched imports in ${file.path} for ${importConfig
+      .map(c => c.glob)
+      .join(", ")} globs`,
   );
 
-  const glob = adjustGlobToParser(file.path, importConfig.glob);
+  const adjustedConfigs = importConfig.map(config => {
+    const globs = adjustGlobToParser(file.path, config.glob);
 
-  const matchedImports = micromatch(file.imports, glob);
+    return { config, globs };
+  });
+
+  const matches: Match[] = [];
+
+  const match = negate ? micromatchNot : micromatch;
+
+  match(
+    file.imports,
+    adjustedConfigs.flatMap(aC => aC.globs),
+    {
+      onMatch: ({ glob, input }) => {
+        const { config } = adjustedConfigs.find(c => c.globs.includes(glob))!;
+
+        // we filter all matches that are related to the same config
+        // single config can be adjusted to more than one glob
+        // see `adjustGlobToParser` function
+        if (
+          !matches.some(
+            match => match.config === config && match.import === input,
+          )
+        ) {
+          matches.push({ config, import: input });
+        }
+      },
+    },
+  );
 
   traversalDebug(
-    `Found ${matchedImports.length} matched imports.\n ${matchedImports.join(
+    `Found ${matches.length} matched imports in ${file.path}.\n ${matches.join(
       "\n",
     )}`,
   );
 
-  return matchedImports;
+  return matches;
 };
 
 const findFilesWithImports = (
   files: TDeepReadonly<TFile>[],
   importConfigs: TImportConfig[],
+  negate: boolean = false,
 ): FileWithMatchedImports[] =>
-  files.flatMap(file =>
-    importConfigs.flatMap(config => {
-      const matchedImports = findMatchedImports(file, config);
+  files.flatMap(file => {
+    const matches = findMatchedImports(file, importConfigs, negate);
 
-      if (matchedImports.length > 0) {
-        return { file, matchedImports, matchedConfig: config };
-      }
+    if (matches.length > 0) {
+      return matches.map(match => ({
+        file,
+        matchedImport: match.import,
+        matchedConfig: match.config,
+      }));
+    }
 
-      return [];
-    }),
-  );
+    return [];
+  });
 
 export { findFilesWithImports, FileWithMatchedImports, findMatchedImports };

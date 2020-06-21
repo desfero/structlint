@@ -34,10 +34,8 @@ const logDisallowedImportViolation = (
         The following imports are disallowed in ${bold(file.path)}
         ${violations
           .map(
-            ({ disallowedImports, config }) => dedent`
-              ${disallowedImports
-                .map(importPath => `- ${bold(importPath)}`)
-                .join("\n")}
+            ({ disallowedImport, config }) => dedent`
+              - ${bold(disallowedImport)}
               ${config.message || ""} 
             `,
           )

@@ -14,13 +14,13 @@ type TViolationByType<T extends EViolationType> = Extract<
 
 const createDisallowedImportViolation = (
   file: TDeepReadonly<TFile>,
-  disallowedImports: string[],
+  disallowedImport: string,
   config: TImportConfig,
 ) =>
   ({
     type: EViolationType.DISALLOWED_IMPORTS,
     file,
-    disallowedImports,
+    disallowedImport,
     config,
   } as const);
 
