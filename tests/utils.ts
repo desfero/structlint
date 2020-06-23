@@ -4,7 +4,7 @@ import { resolve } from "path";
 const structLint = ({ cwd }: { cwd: string }) =>
   new Promise((pResolve, pReject) => {
     exec(
-      resolve(__dirname, "../bin/structlint.js"),
+      `node ${resolve(__dirname, "../bin/structlint.js")}`,
       {
         cwd,
         env: {
@@ -16,11 +16,11 @@ const structLint = ({ cwd }: { cwd: string }) =>
       },
       (error, stdout, stderr) => {
         if (!stdout) {
-          pReject(new Error(`Failed to run structlint. Error: ${error}`));
+          pReject(new Error(`Failed to run structlint. ${error}`));
         }
 
         if (stderr) {
-          pReject(new Error(`Failed to run structlint. Error: ${stderr}`));
+          pReject(new Error(`Failed to run structlint. ${stderr}`));
         }
 
         pResolve({ stdout, code: error ? error.code : 0 });

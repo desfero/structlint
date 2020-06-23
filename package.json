@@ -24,8 +24,8 @@
     "tsc": "tsc --noEmit",
     "test": "jest",
     "lint": "yarn format && cd ./src && structlint",
-    "format": "prettier --check '**/*.{ts,tsx,js,json,md,gql}'",
-    "format:fix": "prettier --write '**/*.{ts,tsx,js,json,md,gql}'"
+    "format": "prettier --check **/*.{ts,tsx,js,json,md,gql}",
+    "format:fix": "prettier --write **/*.{ts,tsx,js,json,md,gql}"
   },
   "dependencies": {
     "@babel/parser": "^7.7.7",
