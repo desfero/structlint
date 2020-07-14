@@ -114,8 +114,7 @@ Checkout the [examples](https://github.com/desfero/structlint/tree/master/exampl
 ## Command line options
 
 Usage: `structlint [options]`
-
 Options:
-  -V, --version   output the version number
-  --print-config  Group violations by configs (default: false)
-  -h, --help      display help for command
+&emsp;`--print-config` -  Group violations by configs (default: false) (_note:_ by default violations from multiple config from the same file are merged)
+&emsp;`-V`, `--version` -  output the version number
+&emsp;`-h`, `--help`      display help for command
