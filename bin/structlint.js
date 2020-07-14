@@ -4,4 +4,4 @@ require("ts-node").register({
   project: path.resolve(__dirname, "../tsconfig.json"),
   skipIgnore: true,
 });
-require("../src/cli").run(process.argv.slice(2));
+require("../src/cli").run(process.argv);

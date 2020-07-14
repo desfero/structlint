@@ -1,10 +1,10 @@
 import { join, sep } from "path";
 
 import {
-  debug,
+  debug, flatAll,
   getImportType,
   getPathFilesAndDirectories,
-  IMPORT_TYPE,
+  IMPORT_TYPE
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
@@ -19,7 +19,7 @@ const importTaskDebug = debug("imports-task");
 const logDebugItems = (label: string, items: Array<string>) =>
   importTaskDebug(`${label}: ${items.length > 0 ? items.join(", ") : "none"}`);
 
-const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
+const runTask = async (config: TLoadConfigs) => {
   /**
    * Remap relative import paths from relative to absolute
    */
@@ -28,26 +28,26 @@ const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
     if (importType === IMPORT_TYPE.RELATIVE) {
       return {
         ...imp,
-        glob: join(sep, relativePath, imp.glob),
+        glob: join(sep, config.relativePath, imp.glob),
       };
     }
 
     return imp;
   };
 
-  async function lint(structureItem: TStructureConfig) {
-    const path = join(relativePath, structureItem.path);
+  async function lint(structureConfig: TStructureConfig) {
+    const path = join(config.relativePath, structureConfig.path);
 
     importTaskDebug(`Running task for ${path}`);
 
-    const disallowedImports = structureItem.disallowedImports.map(remapImports);
+    const disallowedImports = structureConfig.disallowedImports.map(remapImports);
 
     logDebugItems(
       "Disallowed imports",
       disallowedImports.map(imp => imp.glob),
     );
 
-    const allowedImports = structureItem.allowedImports.map(remapImports);
+    const allowedImports = structureConfig.allowedImports.map(remapImports);
 
     logDebugItems(
       "Allowed imports",
@@ -55,7 +55,7 @@ const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
     );
 
     const { files, directories } = await getPathFilesAndDirectories(path, {
-      expandDirectories: structureItem.recursive,
+      expandDirectories: structureConfig.recursive,
     });
 
     logDebugItems("Files to parse", files);
@@ -63,15 +63,16 @@ const runTask = async ({ relativePath, structure }: TLoadConfigs) => {
 
     files.forEach(parse);
 
-    return await analyze(
+    return analyze(
       [path, ...directories],
       disallowedImports,
       allowedImports,
     );
   }
 
-  const taskNested = await Promise.all(structure.map(lint));
-  return taskNested.flat(Infinity);
+  const violations = await flatAll(config.structure.map(lint));
+
+  return { violations, config }
 };
 
 /**

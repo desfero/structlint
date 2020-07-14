@@ -9,7 +9,7 @@ import { TDeepReadonly, TFolder, TDemand } from "./types";
 import { StructlintError } from "./errors";
 import micromatch from "micromatch";
 
-const structLintDebug = debugP("struct-lint");
+const structLintDebug = debugP("structlint");
 
 /**
  *  Cast a `value` to exclude `null` and `undefined`.
@@ -125,6 +125,8 @@ const micromatchNot = (
   return Array.from(result);
 };
 
+const flatAll = <T>(promises: Promise<T[]>[]) => Promise.all(promises).then(nested => nested.flat(1))
+
 export {
   nonNullable,
   getPathFilesAndDirectories,
@@ -134,4 +136,5 @@ export {
   isFolder,
   getFiles,
   micromatchNot,
+  flatAll
 };

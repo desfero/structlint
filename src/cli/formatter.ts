@@ -6,6 +6,7 @@ import { TViolation, TViolationByType, EViolationType } from "../violations";
 import { debug } from "../utils";
 import { NotYetImplementedError } from "../errors";
 import { TDeepReadonly, TFile } from "../types";
+import { TLoadConfigs } from "../config/schemas";
 
 const bold = chalk.bold;
 
@@ -53,6 +54,8 @@ const printResult = (violations: TViolation[]) => {
   return chalk.green("No violations found");
 };
 
+const printConfig = (config: TLoadConfigs) => `${bold("--")} Config path: ${bold(config.relativePath)} `.padEnd(80, "-")
+
 /**
  * Given that violations may come from different tasks for the same file
  * manual grouping is required to show all file related violations at once
@@ -60,6 +63,11 @@ const printResult = (violations: TViolation[]) => {
 const groupViolations = groupBy<TViolation>(
   violation => `${violation.type}|${violation.file.path}`,
 );
+
+const prettyPrintViolationsByConfig = (violations: TViolation[], config: TLoadConfigs) => dedent`
+  ${printConfig(config)}
+  ${prettyPrintViolations(violations)}
+`
 
 const prettyPrintViolations = (violations: TViolation[]) => {
   formatterDebug(`Grouping ${violations.length} violations by type and file`);
@@ -83,4 +91,4 @@ const prettyPrintViolations = (violations: TViolation[]) => {
   );
 };
 
-export { prettyPrintViolations, printResult };
+export { prettyPrintViolations, printResult, prettyPrintViolationsByConfig };
