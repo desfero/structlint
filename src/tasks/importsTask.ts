@@ -1,10 +1,11 @@
 import { join, sep } from "path";
 
 import {
-  debug, flatAll,
+  debug,
+  flatAll,
   getImportType,
   getPathFilesAndDirectories,
-  IMPORT_TYPE
+  IMPORT_TYPE,
 } from "../utils";
 import { parse } from "../parsers";
 import { analyze } from "../analyzer";
@@ -40,7 +41,9 @@ const runTask = async (config: TLoadConfigs) => {
 
     importTaskDebug(`Running task for ${path}`);
 
-    const disallowedImports = structureConfig.disallowedImports.map(remapImports);
+    const disallowedImports = structureConfig.disallowedImports.map(
+      remapImports,
+    );
 
     logDebugItems(
       "Disallowed imports",
@@ -63,16 +66,12 @@ const runTask = async (config: TLoadConfigs) => {
 
     files.forEach(parse);
 
-    return analyze(
-      [path, ...directories],
-      disallowedImports,
-      allowedImports,
-    );
+    return analyze([path, ...directories], disallowedImports, allowedImports);
   }
 
   const violations = await flatAll(config.structure.map(lint));
 
-  return { violations, config }
+  return { violations, config };
 };
 
 /**

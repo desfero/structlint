@@ -1,7 +1,11 @@
 import chalk from "chalk";
 import { program } from "commander";
 
-import { prettyPrintViolations, prettyPrintViolationsByConfig, printResult } from "./formatter";
+import {
+  prettyPrintViolations,
+  prettyPrintViolationsByConfig,
+  printResult,
+} from "./formatter";
 import { loadConfigs } from "../config/loadConfigs";
 import { debug } from "../utils";
 import { importsTask } from "../tasks/importsTask";
@@ -13,8 +17,8 @@ const logBold = chalk.bold;
 
 program
   .version(version)
-  .description('Project structure linter')
-  .option('--print-config', 'Group violations by configs', false);
+  .description("Project structure linter")
+  .option("--print-config", "Group violations by configs", false);
 
 const terminate = () => {
   // terminate the process with non zero exit code
@@ -41,15 +45,23 @@ const run = async (argv: string[]) => {
       configs.map(importsTask.runTask),
     );
 
-    const allViolations = importTaskResults.flatMap(({ violations}) => violations);
+    const allViolations = importTaskResults.flatMap(
+      ({ violations }) => violations,
+    );
 
     log(printResult(allViolations));
 
     if (allViolations.length > 0) {
       if (program.printConfig) {
-        log(importTaskResults.map(({ violations, config }) => prettyPrintViolationsByConfig(violations, config)).join("\n\n"))
+        log(
+          importTaskResults
+            .map(({ violations, config }) =>
+              prettyPrintViolationsByConfig(violations, config),
+            )
+            .join("\n\n"),
+        );
       } else {
-        log(prettyPrintViolations(allViolations))
+        log(prettyPrintViolations(allViolations));
       }
 
       terminate();

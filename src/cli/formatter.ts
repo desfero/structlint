@@ -55,7 +55,10 @@ const printResult = (violations: TViolation[]) => {
   return chalk.green("No violations found");
 };
 
-const printConfig = (config: TLoadConfigs) => `${bold("--")} Config path: ${bold(join(config.relativePath, config.fileName))} `.padEnd(80, "-")
+const printConfig = (config: TLoadConfigs) =>
+  `${bold("--")} Config path: ${bold(
+    join(config.relativePath, config.fileName),
+  )} `.padEnd(80, "-");
 
 /**
  * Given that violations may come from different tasks for the same file
@@ -65,10 +68,13 @@ const groupViolations = groupBy<TViolation>(
   violation => `${violation.type}|${violation.file.path}`,
 );
 
-const prettyPrintViolationsByConfig = (violations: TViolation[], config: TLoadConfigs) => dedent`
+const prettyPrintViolationsByConfig = (
+  violations: TViolation[],
+  config: TLoadConfigs,
+) => dedent`
   ${printConfig(config)}
   ${prettyPrintViolations(violations)}
-`
+`;
 
 const prettyPrintViolations = (violations: TViolation[]) => {
   formatterDebug(`Grouping ${violations.length} violations by type and file`);
