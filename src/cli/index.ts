@@ -45,7 +45,7 @@ const run = async (argv: string[]) => {
 
     log(printResult(allViolations));
 
-    if (importTaskResults.length > 0) {
+    if (allViolations.length > 0) {
       if (program.printConfig) {
         log(importTaskResults.map(({ violations, config }) => prettyPrintViolationsByConfig(violations, config)).join("\n\n"))
       } else {

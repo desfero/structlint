@@ -16,7 +16,7 @@ exports[`cli options --print-config 1`] = `
 "Resolving configs...
 Linting folder structure...
 Found 8 violations
--- Config path:  ---------------------------------------------------------------
+-- Config path: .structlintrc --------------------------------------------------
 
 DISALLOWED IMPORTS: The following imports are disallowed in /modules/transactions/sagas.js
 - /components/TxModal
@@ -33,7 +33,7 @@ DISALLOWED IMPORTS: The following imports are disallowed in /e2e/investor-flow/i
 - /libs/HttpService
 - /e2e/investor-flow/payout.spec.e2e
 
--- Config path: components -----------------------------------------------------
+-- Config path: components/.structlintrc ---------------------------------------
 
 DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.jsx
 - /components/TxSuccessModal

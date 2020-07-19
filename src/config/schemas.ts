@@ -26,6 +26,7 @@ const structureSchema = yup.object({
 });
 
 export const configSchema = yup.object({
+  fileName: yup.string().required(),
   relativePath: yup
     .string()
     .test(

@@ -1,6 +1,6 @@
 import { cosmiconfigSync } from "cosmiconfig";
 import * as globby from "globby";
-import { dirname, relative } from "path";
+import { dirname, relative, basename } from "path";
 
 import { name } from "../../package.json";
 import { TLoadConfigs, configSchema } from "./schemas";
@@ -22,6 +22,7 @@ const loadConfigs = (): ReadonlyArray<TLoadConfigs> =>
 
         return {
           ...explorer.config,
+          fileName: basename(explorer.filepath),
           relativePath: relative(process.cwd(), dirname(explorer.filepath)),
         };
       }

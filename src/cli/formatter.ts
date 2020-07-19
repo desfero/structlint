@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import dedent from "dedent";
 import groupBy from "lodash/fp/groupBy";
+import { join } from "path";
 
 import { TViolation, TViolationByType, EViolationType } from "../violations";
 import { debug } from "../utils";
@@ -54,7 +55,7 @@ const printResult = (violations: TViolation[]) => {
   return chalk.green("No violations found");
 };
 
-const printConfig = (config: TLoadConfigs) => `${bold("--")} Config path: ${bold(config.relativePath)} `.padEnd(80, "-")
+const printConfig = (config: TLoadConfigs) => `${bold("--")} Config path: ${bold(join(config.relativePath, config.fileName))} `.padEnd(80, "-")
 
 /**
  * Given that violations may come from different tasks for the same file
