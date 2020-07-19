@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { structLint } from "./utils";
 
 describe("javascript support", () => {
-  it("should return 2 structure violations", async () => {
+  it("should return violations", async () => {
     const { stdout, code } = await structLint({
       cwd: resolve(__dirname, "../examples/violations-js"),
     });
@@ -30,7 +30,7 @@ describe("javascript support", () => {
     expect(stdout).toMatchSnapshot();
   });
 
-  it("should return 4 violations for mono repo", async () => {
+  it("should return violations for mono repo", async () => {
     const { stdout, code } = await structLint({
       cwd: resolve(__dirname, "../examples/violations-monorepo"),
     });

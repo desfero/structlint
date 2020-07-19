@@ -125,7 +125,8 @@ const micromatchNot = (
   return Array.from(result);
 };
 
-const flatAll = <T>(promises: Promise<T[]>[]) => Promise.all(promises).then(nested => nested.flat(1))
+const flatAll = <T>(promises: Promise<T[]>[]) =>
+  Promise.all(promises).then(nested => nested.flat(1));
 
 export {
   nonNullable,
@@ -136,5 +137,5 @@ export {
   isFolder,
   getFiles,
   micromatchNot,
-  flatAll
+  flatAll,
 };
