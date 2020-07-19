@@ -93,7 +93,7 @@ npx structlint
 Structlint will recursively go through the sub-directories and lint them.
 If you prefer to lint just one sub-directory, you must change the directory before running the command: `cd tests && structlint`.
 
-## Options
+## Config options
 
 ### structure
 
@@ -110,3 +110,11 @@ An array of objects containing the following:
 | `recursive`         | `Boolean`                          | Defaults to `true`. If `false`, will not check sub directories.                                                      |
 
 Checkout the [examples](https://github.com/desfero/structlint/tree/master/examples) for more.
+
+## Command line options
+
+Usage: `structlint [options]`
+Options:
+&emsp;`--print-config` - Group violations by configs (default: false) (_note:_ by default violations from multiple config from the same file are merged)
+&emsp;`-V`, `--version` - output the version number
+&emsp;`-h`, `--help` display help for command

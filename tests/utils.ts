@@ -1,10 +1,18 @@
 import { exec } from "child_process";
 import { resolve } from "path";
 
-const structLint = ({ cwd }: { cwd: string }) =>
+const structLint = ({
+  cwd,
+  options = [],
+}: {
+  cwd: string;
+  options?: string[];
+}) =>
   new Promise((pResolve, pReject) => {
     exec(
-      `node ${resolve(__dirname, "../bin/structlint.js")}`,
+      `node ${resolve(__dirname, "../bin/structlint.js")}${
+        options ? " " + options.join(" ") : ""
+      }`,
       {
         cwd,
         env: {

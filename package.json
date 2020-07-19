@@ -24,13 +24,14 @@
     "tsc": "tsc --noEmit",
     "test": "jest",
     "lint": "yarn format && cd ./src && structlint",
-    "format": "prettier --check **/*.{ts,tsx,js,json,md,gql}",
-    "format:fix": "prettier --write **/*.{ts,tsx,js,json,md,gql}"
+    "format": "prettier --check \"**/*.{ts,tsx,js,json,md,gql}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,js,json,md,gql}\""
   },
   "dependencies": {
     "@babel/parser": "^7.7.7",
     "@babel/traverse": "^7.7.4",
     "chalk": "^3.0.0",
+    "commander": "^5.1.0",
     "cosmiconfig": "^6.0.0",
     "debug": "^4.1.1",
     "dedent": "^0.7.0",

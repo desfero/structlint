@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cli options --help 1`] = `
+"Usage: structlint [options]
+
+Project structure linter
+
+Options:
+  -V, --version   output the version number
+  --print-config  Group violations by configs (default: false)
+  -h, --help      display help for command
+"
+`;
+
+exports[`cli options --print-config 1`] = `
+"Resolving configs...
+Linting folder structure...
+Found 8 violations
+-- Config path: .structlintrc --------------------------------------------------
+
+DISALLOWED IMPORTS: The following imports are disallowed in /modules/transactions/sagas.js
+- /components/TxModal
+Business logic should never import UI components
+- /components/TxSuccessModal
+Business logic should never import UI components
+
+DISALLOWED IMPORTS: The following imports are disallowed in /libs/HttpService.js
+- lodash
+- /modules/utils
+- /config/internal
+
+DISALLOWED IMPORTS: The following imports are disallowed in /e2e/investor-flow/invest.spec.e2e.js
+- /libs/HttpService
+- /e2e/investor-flow/payout.spec.e2e
+
+-- Config path: components/.structlintrc ---------------------------------------
+
+DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/Button.jsx
+- /components/TxSuccessModal
+"
+`;
+
+exports[`cli options --version 1`] = `
+"1.0.0-beta.0
+"
+`;

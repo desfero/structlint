@@ -1,6 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`javascript support should return 2 structure violations 1`] = `
+exports[`javascript support should return no config found 1`] = `
+"Resolving configs...
+You need to specify structure config to run linter.
+"
+`;
+
+exports[`javascript support should return no violations found 1`] = `
+"Resolving configs...
+Linting folder structure...
+No violations found
+"
+`;
+
+exports[`javascript support should return violations 1`] = `
 "Resolving configs...
 Linting folder structure...
 Found 8 violations
@@ -25,7 +38,7 @@ DISALLOWED IMPORTS: The following imports are disallowed in /components/shared/B
 "
 `;
 
-exports[`javascript support should return 4 violations for mono repo 1`] = `
+exports[`javascript support should return violations for mono repo 1`] = `
 "Resolving configs...
 Linting folder structure...
 Found 4 violations
@@ -41,18 +54,5 @@ Don't import components into business-logic
 Don't import components into business-logic
 - react
 Don't import React into business-logic
-"
-`;
-
-exports[`javascript support should return no config found 1`] = `
-"Resolving configs...
-You need to specify structure config to run linter.
-"
-`;
-
-exports[`javascript support should return no violations found 1`] = `
-"Resolving configs...
-Linting folder structure...
-No violations found
 "
 `;

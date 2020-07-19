@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`typescript support should return 2 violations 1`] = `
+exports[`typescript support should return violations 1`] = `
 "Resolving configs...
 Linting folder structure...
 Found 9 violations
