@@ -106,7 +106,6 @@ const parse = (filePath: string): void => {
 
 const extensions = getLanguageExtensions([
   "JavaScript",
-  "JSX",
   "TSX",
   "TypeScript",
 ]);
