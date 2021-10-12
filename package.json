@@ -23,7 +23,7 @@
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "jest",
-    "lint": "yarn format && cd ./src && structlint",
+    "lint": "yarn format && cd ./src && node ../bin/structlint",
     "format": "prettier --check \"**/*.{ts,tsx,js,json,md,gql}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,js,json,md,gql}\""
   },
@@ -58,7 +58,6 @@
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
-    "structlint": "^0.3.1",
     "typescript": "^3.7.4"
   },
   "engines": {
