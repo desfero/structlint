@@ -104,11 +104,7 @@ const parse = (filePath: string): void => {
   }
 };
 
-const extensions = getLanguageExtensions([
-  "JavaScript",
-  "TSX",
-  "TypeScript",
-]);
+const extensions = getLanguageExtensions(["JavaScript", "TSX", "TypeScript"]);
 
 const canParse = (filePath: string): boolean => {
   const ext = extname(filePath);
