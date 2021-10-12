@@ -3951,23 +3951,6 @@ strip-eof@^1.0.0:
   resolved "https://registry.yarnpkg.com/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
   integrity sha1-u0P/VZim6wXYm1n80SnJgzE2Br8=
 
-structlint@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/structlint/-/structlint-0.3.1.tgz#8e0eb9ac3e79539f3ca1e7eff9800ea0164b6c82"
-  integrity sha512-j8P0m/xvd3FMgoE3FFXB1GaE3wX2w+84kN1YKdZ/MtSKKDQojmCIIlEr8cSjNxMAufywIaKbuCycBhOY2oGPjQ==
-  dependencies:
-    "@babel/parser" "^7.7.7"
-    "@babel/traverse" "^7.7.4"
-    chalk "^3.0.0"
-    cosmiconfig "^6.0.0"
-    debug "^4.1.1"
-    dedent "^0.7.0"
-    globby "^10.0.1"
-    linguist-languages "^7.7.0"
-    lodash "^4.17.15"
-    micromatch "^4.0.2"
-    yup "^0.28.0"
-
 supports-color@^5.3.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-5.5.0.tgz#e2e69a44ac8772f78a1ec0b35b689df6530efc8f"
